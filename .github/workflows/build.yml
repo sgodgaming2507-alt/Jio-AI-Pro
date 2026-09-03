@@ -18,14 +18,17 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Make Gradle Executable
-      run: chmod +x gradlew || true
-
-    - name: Build Debug APK
+    - name: Create Basic Gradle Files
       run: |
         echo "include ':app'" > settings.gradle
-        echo "pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }" > build.gradle
-        ./gradlew assembleDebug || ./gradlew build
+        mkdir -p app
+        echo "apply plugin: 'com.android.application'" > app/build.gradle
+        echo "android { namespace 'org.sgod.jioai'; compileSdk 34; defaultConfig { applicationId 'org.sgod.jioai'; minSdk 24; targetSdk 34; versionCode 1; versionName '1.0' } }" >> app/build.gradle
+
+    - name: Download Gradle Wrapper / Build Project
+      run: |
+        gradle wrapper
+        ./gradlew assembleDebug || gradle assembleDebug
 
     - name: Upload APK Release
       uses: actions/upload-artifact@v4
