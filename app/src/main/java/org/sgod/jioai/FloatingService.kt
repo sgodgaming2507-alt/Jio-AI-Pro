@@ -40,7 +40,7 @@ class FloatingService : Service() {
                 settings.domStorageEnabled = true
                 settings.mediaPlaybackRequiresUserGesture = false
                 addJavascriptInterface(WebAppInterface(), "Android")
-                layoutParams = FrameLayout.LayoutParams(260, 260)
+                layoutParams = FrameLayout.LayoutParams(270, 270)
                 loadUrl("file:///android_asset/index.html")
             }
             container.addView(webView)
@@ -114,13 +114,6 @@ class FloatingService : Service() {
                     container.visibility = View.GONE
                     bubbleView.visibility = View.VISIBLE
                 } catch (e: Exception) {}
-            }
-        }
-
-        @JavascriptInterface
-        fun closeApp() {
-            android.os.Handler(mainLooper).post {
-                stopSelf()
             }
         }
     }
