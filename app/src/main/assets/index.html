@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { 
+            background: transparent; 
+            color: #00ff00; 
+            font-family: monospace; 
+            margin: 0; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .admin-panel {
+            width: 220px;
+            height: 220px;
+            background: rgba(12, 18, 12, 0.96);
+            border-radius: 50%;
+            border: 3px solid transparent;
+            background-image: linear-gradient(rgba(12, 18, 12, 0.96), rgba(12, 18, 12, 0.96)), linear-gradient(135deg, #00ff00, #ff0055, #00ffff);
+            background-origin: border-box;
+            background-clip: content-box, border-box;
+            box-shadow: 0 0 28px rgba(0, 255, 0, 0.8), inset 0 0 15px rgba(0, 255, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 15px;
+            box-sizing: border-box;
+            position: relative;
+            animation: rotateGlow 6s linear infinite;
+        }
+
+        @keyframes rotateGlow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        .header-tag { 
+            font-size: 8.5px; 
+            font-weight: bold; 
+            background: rgba(0, 255, 255, 0.2);
+            color: #00ffff; 
+            border: 1px solid #00ffff;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-bottom: 2px;
+        }
+        
+        .sub-title {
+            font-size: 7.5px;
+            color: #bbb;
+            margin-bottom: 3px;
+        }
+
+        .result-box {
+            font-size: 16px;
+            font-weight: bold;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+            margin: 2px 0;
+        }
+
+        .number-box {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffcc00;
+            text-shadow: 0 0 10px #ffcc00;
+        }
+
+        .status-box {
+            font-size: 7px;
+            color: #00ff00;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px dashed #00ff00;
+            padding: 1px 6px;
+            border-radius: 3px;
+            margin: 3px 0;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 4px;
+            width: 100%;
+            justify-content: center;
+            margin-top: 3px;
+        }
+
+        button { 
+            background: #00ff00; 
+            color: #000; 
+            border: none; 
+            padding: 3px 7px; 
+            font-weight: bold; 
+            font-size: 9px; 
+            border-radius: 4px; 
+            cursor: pointer;
+            box-shadow: 0 0 5px #00ff00;
+            pointer-events: auto;
+        }
+        
+        .hide-btn { background: #ffaa00; color: #000; }
+        .close-btn { background: #cc0000; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-panel">
+        <div class="header-tag">RADHE ADMIN PANEL</div>
+        <div class="sub-title">PER: <span id="period-num" style="color:cyan;">00000</span> | <span id="timer" style="color:#ff5555;">00:00</span></div>
+        
+        <div class="result-box" id="prediction">CONNECTING</div>
+        <div style="font-size: 7px; color: #aaa;">LUCKY DIGIT</div>
+        <div class="number-box" id="lucky-number">-</div>
+
+        <div class="status-box" id="analytics-status">Status: Active</div>
+
+        <div class="btn-group">
+            <button class="hide-btn" onclick="Android.minimizePanel()">HIDE</button>
+            <button class="close-btn" onclick="Android.closeApp()">EXIT</button>
+        </div>
+    </div>
+
+    <script>
+        let activePeriodId = "";
+        let memoryLog = [];
+
+        function startEngine() {
+            function runClock() {
+                const now = new Date();
+                const istOffset = 5.5 * 60 * 60 * 1000;
+                const istDate = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + istOffset);
+
+                const year = istDate.getFullYear();
+                const month = String(istDate.getMonth() + 1).padStart(2, '0');
+                const day = String(istDate.getDate()).padStart(2, '0');
+                
+                const hours = istDate.getHours();
+                const minutes = istDate.getMinutes();
+                const seconds = istDate.getSeconds();
+
+                const totalMinsToday = (hours * 60) + minutes + 1;
+                const fullPeriodId = `${year}${month}${day}000${String(totalMinsToday).padStart(3, '0')}`;
+
+                document.getElementById("period-num").innerText = fullPeriodId.slice(-6);
+
+                let secLeft = 59 - (seconds % 60);
+                let secStr = secLeft < 10 ? "0" + secLeft : secLeft;
+                document.getElementById("timer").innerText = "00:" + secStr;
+
+                if (fullPeriodId !== activePeriodId) {
+                    activePeriodId = fullPeriodId;
+                    calculatePrediction(fullPeriodId);
+                }
+            }
+            setInterval(runClock, 1000);
+            runClock();
+        }
+
+        function stringHashCode(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return hash;
+        }
+
+        function calculatePrediction(period) {
+            let rawHash = Math.abs(stringHashCode(period));
+            let correctionFactor = 0;
+            
+            if (memoryLog.length >= 3) {
+                let lastThree = memoryLog.slice(-3);
+                if (lastThree.every(v => v === true)) {
+                    correctionFactor = -5;
+                    document.getElementById('analytics-status').innerText = "Matrix: Reversing";
+                } else if (lastThree.every(v => v === false)) {
+                    correctionFactor = 5;
+                    document.getElementById('analytics-status').innerText = "Matrix: Reversing";
+                } else {
+                    document.getElementById('analytics-status').innerText = "Status: Active";
+                }
+            }
+
+            let balancedValue = rawHash + correctionFactor;
+            let isBig = balancedValue % 2 === 0;
+
+            memoryLog.push(isBig);
+            if (memoryLog.length > 10) memoryLog.shift();
+
+            let resultText = isBig ? "BIG 🟢" : "SMALL 🔴";
+            let luckyNum = isBig ? (5 + (balancedValue % 5)) : (balancedValue % 5);
+
+            document.getElementById('prediction').innerText = resultText;
+            document.getElementById('prediction').style.color = isBig ? "#00ff00" : "#ff3333";
+            document.getElementById('lucky-number').innerText = luckyNum;
+        }
+
+        startEngine();
+    </script>
+</body>
+</html>
