@@ -40,7 +40,7 @@ class FloatingService : Service() {
                 settings.domStorageEnabled = true
                 settings.mediaPlaybackRequiresUserGesture = false
                 addJavascriptInterface(WebAppInterface(), "Android")
-                layoutParams = FrameLayout.LayoutParams(360, 380)
+                layoutParams = FrameLayout.LayoutParams(260, 260)
                 loadUrl("file:///android_asset/index.html")
             }
             container.addView(webView)
@@ -69,8 +69,8 @@ class FloatingService : Service() {
                 PixelFormat.TRANSLUCENT
             ).apply {
                 gravity = Gravity.TOP or Gravity.START
-                x = 50
-                y = 120
+                x = 100
+                y = 200
             }
 
             var initialX = 0
