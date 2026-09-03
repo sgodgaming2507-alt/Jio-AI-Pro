@@ -18,27 +18,27 @@
             overflow: hidden;
         }
         .panel {
-            width: 290px;
-            background: linear-gradient(135deg, rgba(20, 20, 40, 0.95), rgba(10, 10, 25, 0.95));
+            width: 300px;
+            background: linear-gradient(135deg, rgba(20, 20, 40, 0.98), rgba(10, 10, 25, 0.98));
             border: 2px solid #00ffcc;
             border-radius: 16px;
-            padding: 12px;
-            box-shadow: 0 0 25px rgba(0, 255, 204, 0.4), inset 0 0 10px rgba(0, 255, 204, 0.2);
+            padding: 16px 12px;
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.5);
             text-align: center;
-            backdrop-filter: blur(10px);
+            box-sizing: border-box;
         }
         .header {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 800;
             color: #00ffcc;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
             letter-spacing: 1.5px;
             text-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
         }
         .period {
-            font-size: 11px;
+            font-size: 12px;
             color: #ffcc00;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 600;
         }
         .result-box {
@@ -47,7 +47,6 @@
             padding: 10px;
             margin-bottom: 10px;
             border: 1px solid rgba(0, 255, 204, 0.3);
-            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.8);
         }
         .big-small {
             font-size: 22px;
@@ -55,7 +54,6 @@
             color: #ff00ff;
             margin-bottom: 2px;
             text-shadow: 0 0 10px rgba(255, 0, 255, 0.6);
-            letter-spacing: 1px;
         }
         .digit {
             font-size: 26px;
@@ -72,28 +70,25 @@
         .btn-container {
             display: flex;
             justify-content: space-between;
-            gap: 6px;
+            gap: 8px;
         }
         button {
             flex: 1;
-            padding: 7px;
+            padding: 8px;
             border: none;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
             font-size: 11px;
             letter-spacing: 0.5px;
-            transition: 0.2s;
         }
         .hide-btn { 
             background: linear-gradient(135deg, #ffaa00, #ff8800); 
             color: #000; 
-            box-shadow: 0 0 8px rgba(255, 170, 0, 0.4);
         }
         .exit-btn { 
             background: linear-gradient(135deg, #ff4444, #cc0000); 
             color: #fff; 
-            box-shadow: 0 0 8px rgba(255, 68, 68, 0.4);
         }
     </style>
 </head>
