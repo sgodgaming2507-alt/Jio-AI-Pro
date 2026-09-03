@@ -14,12 +14,15 @@ import android.view.WindowManager
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.widget.FrameLayout
+import android.widget.TextView
 
 class FloatingService : Service() {
 
     private lateinit var windowManager: WindowManager
-    private lateinit var webView: WebView
+    private lateinit var container: FrameLayout
+    private lateinit var bubbleView: TextView
     private lateinit var params: WindowManager.LayoutParams
+    private lateinit var webView: WebView
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -29,13 +32,27 @@ class FloatingService : Service() {
         try {
             windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
+            container = FrameLayout(this)
+
             webView = WebView(this).apply {
                 setBackgroundColor(Color.TRANSPARENT)
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
                 settings.mediaPlaybackRequiresUserGesture = false
                 addJavascriptInterface(WebAppInterface(), "Android")
+                layoutParams = FrameLayout.LayoutParams(300, 240)
                 loadUrl("file:///android_asset/index.html")
+            }
+            container.addView(webView)
+
+            bubbleView = TextView(this).apply {
+                text = "⚡"
+                setTextColor(Color.WHITE)
+                textSize = 20f
+                gravity = Gravity.CENTER
+                setBackgroundColor(Color.parseColor("#cc000000"))
+                setPadding(15, 15, 15, 15)
+                visibility = View.GONE
             }
 
             val layoutFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -45,8 +62,8 @@ class FloatingService : Service() {
             }
 
             params = WindowManager.LayoutParams(
-                300,
-                230,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
                 layoutFlag,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT
@@ -61,7 +78,7 @@ class FloatingService : Service() {
             var initialTouchX = 0f
             var initialTouchY = 0f
 
-            webView.setOnTouchListener { _, event ->
+            container.setOnTouchListener { _, event ->
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
                         initialX = params.x
@@ -74,7 +91,7 @@ class FloatingService : Service() {
                         params.x = initialX + (event.rawX - initialTouchX).toInt()
                         params.y = initialY + (event.rawY - initialTouchY).toInt()
                         try {
-                            windowManager.updateViewLayout(webView, params)
+                            windowManager.updateViewLayout(container, params)
                         } catch (e: Exception) {}
                         true
                     }
@@ -82,13 +99,24 @@ class FloatingService : Service() {
                 }
             }
 
-            windowManager.addView(webView, params)
+            windowManager.addView(container, params)
+            windowManager.addView(bubbleView, params)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
     inner class WebAppInterface {
+        @JavascriptInterface
+        fun minimizePanel() {
+            android.os.Handler(mainLooper).post {
+                try {
+                    container.visibility = View.GONE
+                    bubbleView.visibility = View.VISIBLE
+                } catch (e: Exception) {}
+            }
+        }
+
         @JavascriptInterface
         fun closeApp() {
             android.os.Handler(mainLooper).post {
@@ -100,8 +128,9 @@ class FloatingService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         try {
-            if (::windowManager.isInitialized && ::webView.isInitialized) {
-                windowManager.removeView(webView)
+            if (::windowManager.isInitialized) {
+                if (::container.isInitialized) windowManager.removeView(container)
+                if (::bubbleView.isInitialized) windowManager.removeView(bubbleView)
             }
         } catch (e: Exception) {}
     }
