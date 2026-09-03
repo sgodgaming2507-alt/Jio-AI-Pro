@@ -18,16 +18,12 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Create Basic Gradle Files
-      run: |
-        echo "include ':app'" > settings.gradle
-        mkdir -p app
-        echo "apply plugin: 'com.android.application'" > app/build.gradle
-        echo "android { namespace 'org.sgod.jioai'; compileSdk 34; defaultConfig { applicationId 'org.sgod.jioai'; minSdk 24; targetSdk 34; versionCode 1; versionName '1.0' } }" >> app/build.gradle
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
 
-    - name: Download Gradle Wrapper / Build Project
+    - name: Build Debug APK
       run: |
-        gradle wrapper
+        chmod +x gradlew || true
         ./gradlew assembleDebug || gradle assembleDebug
 
     - name: Upload APK Release
