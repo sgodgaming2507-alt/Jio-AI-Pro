@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Radhe Admin Panel</title>
+    <title>Jio AI Pro</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            background: rgba(0, 0, 0, 0.85);
+            background: transparent;
             font-family: Arial, sans-serif;
             color: #fff;
             display: flex;
@@ -18,48 +18,48 @@
             overflow: hidden;
         }
         .panel {
-            width: 280px;
+            width: 270px;
             background: linear-gradient(135deg, #1a1a2e, #16213e);
             border: 2px solid #00ffcc;
-            border-radius: 15px;
-            padding: 12px;
+            border-radius: 12px;
+            padding: 10px;
             box-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
             text-align: center;
         }
         .header {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             color: #00ffcc;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             letter-spacing: 1px;
         }
         .period {
-            font-size: 12px;
+            font-size: 11px;
             color: #ffcc00;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .result-box {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 8px;
             border: 1px solid #444;
         }
         .big-small {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             color: #ff00ff;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .digit {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
             color: #00ffff;
         }
         .status {
-            font-size: 10px;
+            font-size: 9px;
             color: #00ff00;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .btn-container {
             display: flex;
@@ -67,13 +67,13 @@
         }
         button {
             flex: 1;
-            margin: 0 4px;
-            padding: 6px;
+            margin: 0 3px;
+            padding: 5px;
             border: none;
-            border-radius: 6px;
+            border-radius: 5px;
             font-weight: bold;
             cursor: pointer;
-            font-size: 11px;
+            font-size: 10px;
         }
         .hide-btn { background: #ffaa00; color: #000; }
         .exit-btn { background: #ff4444; color: #fff; }
@@ -82,16 +82,16 @@
 <body>
 
     <div class="panel">
-        <div class="header">RADHE ADMIN PANEL</div>
+        <div class="header">JIO AI PRO</div>
         <div class="period" id="periodText">PER: Loading...</div>
         
         <div class="result-box">
             <div class="big-small" id="predictionText">WAIT...</div>
-            <div style="font-size: 10px; color: #aaa;">LUCKY DIGIT</div>
+            <div style="font-size: 9px; color: #aaa;">LUCKY DIGIT</div>
             <div class="digit" id="digitText">-</div>
         </div>
 
-        <div class="status">Status: Active (IST Synced)</div>
+        <div class="status">Status: Active & Synced</div>
 
         <div class="btn-container">
             <button class="hide-btn" onclick="minimizeApp()">HIDE</button>
@@ -101,7 +101,6 @@
 
     <script>
         function updatePanel() {
-            // Get current time in IST (UTC + 5:30)
             const now = new Date();
             const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
             const istTime = new Date(utc + (3600000 * 5.5));
@@ -112,16 +111,13 @@
             
             const hours = istTime.getHours();
             const minutes = istTime.getMinutes();
-            const totalMinutesToday = (hours * 60) + minutes;
+            const totalMins = (hours * 60) + minutes;
 
-            // Wingo 1 Min base period calculation formula
-            const baseNumber = (hours * 60) + minutes + 1;
-            const periodSeq = String(100000000 + totalMinutesToday + 1).slice(1);
+            const periodSeq = 10000 + totalMins + 1;
             const periodCode = `${year}${month}${day}1000${periodSeq}`;
 
             document.getElementById("periodText").innerText = `PER: ${periodCode}`;
 
-            // Generate stable pseudo-random prediction based on period
             const lastDigit = parseInt(periodCode.slice(-1));
             const isBig = lastDigit >= 5;
 
@@ -129,7 +125,6 @@
             document.getElementById("digitText").innerText = lastDigit;
         }
 
-        // Run immediately and update every second
         updatePanel();
         setInterval(updatePanel, 1000);
 
