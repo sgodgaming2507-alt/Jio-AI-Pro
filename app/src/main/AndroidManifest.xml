@@ -7,7 +7,7 @@
 
     <application
         android:allowBackup="true"
-        android:label="Radhe Admin Pro"
+        android:label="Jio AI Pro"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         
