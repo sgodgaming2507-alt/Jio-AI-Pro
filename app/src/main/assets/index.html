@@ -61,17 +61,22 @@
             color: #00ff00;
             margin-bottom: 6px;
         }
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+        }
         button {
-            width: 100%;
+            flex: 1;
+            margin: 0 3px;
             padding: 5px;
             border: none;
             border-radius: 5px;
             font-weight: bold;
             cursor: pointer;
             font-size: 10px;
-            background: #ff4444;
-            color: #fff;
         }
+        .hide-btn { background: #ffaa00; color: #000; }
+        .exit-btn { background: #ff4444; color: #fff; }
     </style>
 </head>
 <body>
@@ -87,7 +92,11 @@
         </div>
 
         <div class="status">Status: Active & Synced</div>
-        <button onclick="exitApp()">EXIT</button>
+
+        <div class="btn-container">
+            <button class="hide-btn" onclick="minimizeApp()">HIDE</button>
+            <button class="exit-btn" onclick="exitApp()">EXIT</button>
+        </div>
     </div>
 
     <script>
@@ -118,6 +127,12 @@
 
         updatePanel();
         setInterval(updatePanel, 1000);
+
+        function minimizeApp() {
+            if (window.Android && window.Android.minimizePanel) {
+                window.Android.minimizePanel();
+            }
+        }
 
         function exitApp() {
             if (window.Android && window.Android.closeApp) {
