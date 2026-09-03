@@ -1,206 +1,149 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radhe Admin Panel</title>
     <style>
-        body { 
-            background: transparent; 
-            color: #00ff00; 
-            font-family: monospace; 
-            margin: 0; 
+        body {
+            margin: 0;
+            padding: 0;
+            background: rgba(0, 0, 0, 0.85);
+            font-family: Arial, sans-serif;
+            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            overflow: hidden;
         }
-
-        .admin-panel {
-            width: 220px;
-            height: 220px;
-            background: rgba(12, 18, 12, 0.96);
-            border-radius: 50%;
-            border: 3px solid transparent;
-            background-image: linear-gradient(rgba(12, 18, 12, 0.96), rgba(12, 18, 12, 0.96)), linear-gradient(135deg, #00ff00, #ff0055, #00ffff);
-            background-origin: border-box;
-            background-clip: content-box, border-box;
-            box-shadow: 0 0 28px rgba(0, 255, 0, 0.8), inset 0 0 15px rgba(0, 255, 0, 0.4);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        .panel {
+            width: 280px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 2px solid #00ffcc;
+            border-radius: 15px;
+            padding: 12px;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
             text-align: center;
-            padding: 15px;
-            box-sizing: border-box;
-            position: relative;
-            animation: rotateGlow 6s linear infinite;
         }
-
-        @keyframes rotateGlow {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
-        }
-
-        .header-tag { 
-            font-size: 8.5px; 
-            font-weight: bold; 
-            background: rgba(0, 255, 255, 0.2);
-            color: #00ffff; 
-            border: 1px solid #00ffff;
-            padding: 1px 6px;
-            border-radius: 4px;
-            margin-bottom: 2px;
-        }
-        
-        .sub-title {
-            font-size: 7.5px;
-            color: #bbb;
-            margin-bottom: 3px;
-        }
-
-        .result-box {
-            font-size: 16px;
+        .header {
+            font-size: 14px;
             font-weight: bold;
-            color: #00ff00;
-            text-shadow: 0 0 10px #00ff00;
-            margin: 2px 0;
+            color: #00ffcc;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
         }
-
-        .number-box {
-            font-size: 18px;
-            font-weight: bold;
+        .period {
+            font-size: 12px;
             color: #ffcc00;
-            text-shadow: 0 0 10px #ffcc00;
+            margin-bottom: 8px;
         }
-
-        .status-box {
-            font-size: 7px;
+        .result-box {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #444;
+        }
+        .big-small {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff00ff;
+            margin-bottom: 4px;
+        }
+        .digit {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ffff;
+        }
+        .status {
+            font-size: 10px;
             color: #00ff00;
-            background: rgba(0, 255, 0, 0.1);
-            border: 1px dashed #00ff00;
-            padding: 1px 6px;
-            border-radius: 3px;
-            margin: 3px 0;
+            margin-bottom: 8px;
         }
-
-        .btn-group {
+        .btn-container {
             display: flex;
-            gap: 4px;
-            width: 100%;
-            justify-content: center;
-            margin-top: 3px;
+            justify-content: space-between;
         }
-
-        button { 
-            background: #00ff00; 
-            color: #000; 
-            border: none; 
-            padding: 3px 7px; 
-            font-weight: bold; 
-            font-size: 9px; 
-            border-radius: 4px; 
+        button {
+            flex: 1;
+            margin: 0 4px;
+            padding: 6px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 0 5px #00ff00;
-            pointer-events: auto;
+            font-size: 11px;
         }
-        
         .hide-btn { background: #ffaa00; color: #000; }
-        .close-btn { background: #cc0000; color: white; }
+        .exit-btn { background: #ff4444; color: #fff; }
     </style>
 </head>
 <body>
 
-    <div class="admin-panel">
-        <div class="header-tag">RADHE ADMIN PANEL</div>
-        <div class="sub-title">PER: <span id="period-num" style="color:cyan;">00000</span> | <span id="timer" style="color:#ff5555;">00:00</span></div>
+    <div class="panel">
+        <div class="header">RADHE ADMIN PANEL</div>
+        <div class="period" id="periodText">PER: Loading...</div>
         
-        <div class="result-box" id="prediction">CONNECTING</div>
-        <div style="font-size: 7px; color: #aaa;">LUCKY DIGIT</div>
-        <div class="number-box" id="lucky-number">-</div>
+        <div class="result-box">
+            <div class="big-small" id="predictionText">WAIT...</div>
+            <div style="font-size: 10px; color: #aaa;">LUCKY DIGIT</div>
+            <div class="digit" id="digitText">-</div>
+        </div>
 
-        <div class="status-box" id="analytics-status">Status: Active</div>
+        <div class="status">Status: Active (IST Synced)</div>
 
-        <div class="btn-group">
-            <button class="hide-btn" onclick="Android.minimizePanel()">HIDE</button>
-            <button class="close-btn" onclick="Android.closeApp()">EXIT</button>
+        <div class="btn-container">
+            <button class="hide-btn" onclick="minimizeApp()">HIDE</button>
+            <button class="exit-btn" onclick="exitApp()">EXIT</button>
         </div>
     </div>
 
     <script>
-        let activePeriodId = "";
-        let memoryLog = [];
+        function updatePanel() {
+            // Get current time in IST (UTC + 5:30)
+            const now = new Date();
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const istTime = new Date(utc + (3600000 * 5.5));
 
-        function startEngine() {
-            function runClock() {
-                const now = new Date();
-                const istOffset = 5.5 * 60 * 60 * 1000;
-                const istDate = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + istOffset);
-
-                const year = istDate.getFullYear();
-                const month = String(istDate.getMonth() + 1).padStart(2, '0');
-                const day = String(istDate.getDate()).padStart(2, '0');
-                
-                const hours = istDate.getHours();
-                const minutes = istDate.getMinutes();
-                const seconds = istDate.getSeconds();
-
-                const totalMinsToday = (hours * 60) + minutes + 1;
-                const fullPeriodId = `${year}${month}${day}000${String(totalMinsToday).padStart(3, '0')}`;
-
-                document.getElementById("period-num").innerText = fullPeriodId.slice(-6);
-
-                let secLeft = 59 - (seconds % 60);
-                let secStr = secLeft < 10 ? "0" + secLeft : secLeft;
-                document.getElementById("timer").innerText = "00:" + secStr;
-
-                if (fullPeriodId !== activePeriodId) {
-                    activePeriodId = fullPeriodId;
-                    calculatePrediction(fullPeriodId);
-                }
-            }
-            setInterval(runClock, 1000);
-            runClock();
-        }
-
-        function stringHashCode(str) {
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                hash = str.charCodeAt(i) + ((hash << 5) - hash);
-            }
-            return hash;
-        }
-
-        function calculatePrediction(period) {
-            let rawHash = Math.abs(stringHashCode(period));
-            let correctionFactor = 0;
+            const year = istTime.getFullYear();
+            const month = String(istTime.getMonth() + 1).padStart(2, '0');
+            const day = String(istTime.getDate()).padStart(2, '0');
             
-            if (memoryLog.length >= 3) {
-                let lastThree = memoryLog.slice(-3);
-                if (lastThree.every(v => v === true)) {
-                    correctionFactor = -5;
-                    document.getElementById('analytics-status').innerText = "Matrix: Reversing";
-                } else if (lastThree.every(v => v === false)) {
-                    correctionFactor = 5;
-                    document.getElementById('analytics-status').innerText = "Matrix: Reversing";
-                } else {
-                    document.getElementById('analytics-status').innerText = "Status: Active";
-                }
-            }
+            const hours = istTime.getHours();
+            const minutes = istTime.getMinutes();
+            const totalMinutesToday = (hours * 60) + minutes;
 
-            let balancedValue = rawHash + correctionFactor;
-            let isBig = balancedValue % 2 === 0;
+            // Wingo 1 Min base period calculation formula
+            const baseNumber = (hours * 60) + minutes + 1;
+            const periodSeq = String(100000000 + totalMinutesToday + 1).slice(1);
+            const periodCode = `${year}${month}${day}1000${periodSeq}`;
 
-            memoryLog.push(isBig);
-            if (memoryLog.length > 10) memoryLog.shift();
+            document.getElementById("periodText").innerText = `PER: ${periodCode}`;
 
-            let resultText = isBig ? "BIG 🟢" : "SMALL 🔴";
-            let luckyNum = isBig ? (5 + (balancedValue % 5)) : (balancedValue % 5);
+            // Generate stable pseudo-random prediction based on period
+            const lastDigit = parseInt(periodCode.slice(-1));
+            const isBig = lastDigit >= 5;
 
-            document.getElementById('prediction').innerText = resultText;
-            document.getElementById('prediction').style.color = isBig ? "#00ff00" : "#ff3333";
-            document.getElementById('lucky-number').innerText = luckyNum;
+            document.getElementById("predictionText").innerText = isBig ? "BIG" : "SMALL";
+            document.getElementById("digitText").innerText = lastDigit;
         }
 
-        startEngine();
+        // Run immediately and update every second
+        updatePanel();
+        setInterval(updatePanel, 1000);
+
+        function minimizeApp() {
+            if (window.Android && window.Android.minimizePanel) {
+                window.Android.minimizePanel();
+            }
+        }
+
+        function exitApp() {
+            if (window.Android && window.Android.closeApp) {
+                window.Android.closeApp();
+            }
+        }
     </script>
 </body>
 </html>
