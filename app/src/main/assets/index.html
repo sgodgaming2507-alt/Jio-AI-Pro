@@ -1,142 +1,225 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jio AI Pro</title>
     <style>
-        body {
-            margin: 0;
+        * { box-sizing: border-box; }
+        body { 
+            background: transparent; 
+            margin: 0; 
             padding: 0;
-            background: transparent;
-            font-family: Arial, sans-serif;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            font-family: sans-serif; 
+            overflow: hidden; 
         }
-        .circle-panel {
-            width: 270px;
-            height: 270px;
-            background: linear-gradient(135deg, #0b0f19, #1a1a2e);
-            border: 4px solid transparent;
-            border-radius: 50%;
-            background-image: linear-gradient(#1a1a2e, #1a1a2e), linear-gradient(135deg, #00ffcc, #ff00ff, #00ffff);
-            background-origin: border-box;
-            background-clip: content-box, border-box;
-            box-shadow: 0 0 25px rgba(0, 255, 204, 0.7);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        
+        .injector-card {
+            width: 240px; 
+            background: rgba(0, 0, 0, 0.95); 
+            border: 2px solid #39ff14; 
+            border-radius: 12px; 
+            padding: 10px; 
             text-align: center;
-            padding: 25px;
-            box-sizing: border-box;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.5); 
+            color: white; 
+            position: relative;
         }
-        .header {
-            font-size: 11px;
-            font-weight: bold;
-            color: #00ffcc;
-            margin-bottom: 2px;
-            letter-spacing: 1.5px;
+
+        .header { 
+            color: #39ff14; 
+            font-weight: bold; 
+            font-size: 13px; 
+            margin-bottom: 4px; 
+            letter-spacing: 0.5px; 
         }
-        .period {
-            font-size: 10px;
-            color: #ffcc00;
-            margin-bottom: 4px;
+        
+        .close-btn { 
+            position: absolute; 
+            right: 8px; 
+            top: 4px; 
+            color: #39ff14; 
+            font-size: 14px; 
+            cursor: pointer; 
         }
-        .big-small {
-            font-size: 22px;
-            font-weight: 900;
-            color: #ff00ff;
-            margin-bottom: 2px;
-            text-shadow: 0 0 10px rgba(255, 0, 255, 0.7);
+
+        /* Loader */
+        .loader-container { display: none; margin: 5px 0; }
+        .loader {
+            width: 24px; height: 24px; border: 2px solid #1a1a1a; border-top: 2px solid #39ff14;
+            border-radius: 50%; margin: 0 auto; animation: spin 0.8s linear infinite;
         }
-        .digit-label {
-            font-size: 8px;
-            color: #aaa;
-            letter-spacing: 1px;
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .status-text { color: #39ff14; font-size: 8px; margin-top: 3px; font-weight: bold; }
+
+        /* Result Display */
+        #result-circle { 
+            width: 50px; height: 50px; border-radius: 50%; margin: 6px auto; 
+            display: none; align-items: center; justify-content: center; 
+            font-size: 12px; font-weight: bold; border: 2px solid #39ff14;
         }
-        .digit {
-            font-size: 24px;
-            font-weight: bold;
-            color: #00ffff;
-            margin-bottom: 6px;
-            text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+
+        /* Period Box */
+        .period-box {
+            background: #1a1a1a; border-radius: 6px; padding: 4px; font-size: 9px;
+            color: #39ff14; margin-top: 6px; border: 1px solid #333; font-weight: bold;
         }
-        .btn-container {
-            display: flex;
-            gap: 6px;
+
+        /* Button */
+        .btn-hack {
+            background: linear-gradient(to right, #ff0000, #990000); border: none;
+            color: white; padding: 6px; border-radius: 6px; font-weight: bold;
+            width: 100%; margin-top: 6px; font-size: 11px; cursor: pointer;
         }
-        button {
-            padding: 4px 10px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 9px;
-            letter-spacing: 0.5px;
-        }
-        .execute-btn { background: #00ffcc; color: #000; }
-        .hide-btn { background: #ffaa00; color: #000; }
     </style>
 </head>
 <body>
 
-    <div class="circle-panel">
-        <div class="header">JIO AI PRO</div>
-        <div class="period" id="periodText">PER: Loading...</div>
-        
-        <div class="big-small" id="predictionText">WAIT...</div>
-        <div class="digit-label">LUCKY DIGIT</div>
-        <div class="digit" id="digitText">-</div>
-
-        <div class="btn-container">
-            <button class="execute-btn" onclick="executeAction()">EXECUTE</button>
-            <button class="hide-btn" onclick="minimizeApp()">HIDE</button>
-        </div>
+<div class="injector-card">
+    <div class="close-btn" onclick="Android.closeMenu()">×</div>
+    <div class="header">MANAV VIP HACK</div>
+    
+    <div id="loader-area" class="loader-container">
+        <div class="loader"></div>
+        <div class="status-text">AI ANALYZING...</div>
     </div>
+    
+    <div id="result-circle"></div>
 
-    <script>
-        function updatePanel() {
-            const now = new Date();
-            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const istTime = new Date(utc + (3600000 * 5.5));
+    <button id="hack_btn" class="btn-hack" onclick="handleHack()">⚡ START HACK ⚡</button>
 
-            const year = istTime.getFullYear();
-            const month = String(istTime.getMonth() + 1).padStart(2, '0');
-            const day = String(istTime.getDate()).padStart(2, '0');
-            
-            const hours = istTime.getHours();
-            const minutes = istTime.getMinutes();
-            const totalMins = (hours * 60) + minutes;
+    <div class="period-box" id="period_text">
+        PERIOD: --
+    </div>
+</div>
 
-            const periodSeq = 10000 + totalMins + 1;
-            const periodCode = `${year}${month}${day}1000${periodSeq}`;
-
-            document.getElementById("periodText").innerText = `PER: ${periodCode}`;
-
-            const lastDigit = parseInt(periodCode.slice(-1));
-            const isBig = lastDigit >= 5;
-
-            document.getElementById("predictionText").innerText = isBig ? "BIG" : "SMALL";
-            document.getElementById("digitText").innerText = lastDigit;
+<script>
+    // --- Advanced Wingo Prediction Engine (JS Integrated) ---
+    class WingoPredictionEngine {
+        constructor(windowSize = 50) {
+            this.windowSize = windowSize;
+            this.history = [];
+            this.currentStreakColor = null;
+            this.currentStreakCount = 0;
+            this.weights = { meanReversion: 0.4, streakBreaker: 0.3, trendFollower: 0.3 };
         }
 
-        updatePanel();
-        setInterval(updatePanel, 1000);
+        updateHistory(color, number) {
+            const entry = { color: color.toUpperCase(), number: number, timestamp: Date.now() };
+            this.history.push(entry);
+            if (this.history.length > this.windowSize) { this.history.shift(); }
 
-        function executeAction() {
-            alert("AI Synced Successfully!");
-        }
-
-        function minimizeApp() {
-            if (window.Android && window.Android.minimizePanel) {
-                window.Android.minimizePanel();
+            if (this.currentStreakColor === entry.color) {
+                this.currentStreakCount++;
+            } else {
+                this.currentStreakColor = entry.color;
+                this.currentStreakCount = 1;
             }
         }
-    </script>
+
+        calculateProbabilities() {
+            if (this.history.length === 0) return { RED: 0.33, GREEN: 0.33, VIOLET: 0.34 };
+            const counts = { RED: 0, GREEN: 0, VIOLET: 0 };
+            this.history.forEach(item => { if (counts.hasOwnProperty(item.color)) counts[item.color]++; });
+            const total = this.history.length;
+            return { RED: counts.RED / total, GREEN: counts.GREEN / total, VIOLET: counts.VIOLET / total };
+        }
+
+        predict() {
+            // Agar history kam hai toh period ke last digit base fallback use karega
+            if (this.history.length < 3) return null;
+
+            const probs = this.calculateProbabilities();
+            let scores = { RED: 0, GREEN: 0, VIOLET: 0 };
+
+            for (const [color, prob] of Object.entries(probs)) {
+                if (prob < 0.30) scores[color] += this.weights.meanReversion * (0.30 - prob) * 10;
+            }
+
+            if (this.currentStreakCount >= 3) {
+                const bw = this.weights.streakBreaker;
+                if (this.currentStreakColor === 'RED') { scores.GREEN += bw; scores.VIOLET += bw; }
+                else if (this.currentStreakColor === 'GREEN') { scores.RED += bw; scores.VIOLET += bw; }
+                else { scores.RED += bw * 0.5; scores.GREEN += bw * 0.5; }
+            }
+
+            if (this.currentStreakCount < 3 && this.currentStreakColor) {
+                scores[this.currentStreakColor] += this.weights.trendFollower * 0.5;
+            }
+
+            const maxScore = Math.max(...Object.values(scores));
+            if (maxScore === 0) return null;
+            return Object.keys(scores).find(key => scores[key] === maxScore);
+        }
+    }
+
+    const aiEngine = new WingoPredictionEngine(50);
+    let lastPeriod = "";
+
+    function updatePeriod() {
+        let now = new Date();
+        let year = now.getFullYear();
+        let month = String(now.getMonth() + 1).padStart(2, '0');
+        let day = String(now.getDate()).padStart(2, '0');
+        
+        let totalMinutes = now.getHours() * 60 + now.getMinutes();
+        let periodIndex = totalMinutes + 1;
+        let paddedIndex = String(periodIndex).padStart(4, '0');
+        let periodCode = year + month + day + "1000" + paddedIndex;
+
+        document.getElementById('period_text').innerText = "PERIOD: " + periodCode;
+        return periodCode;
+    }
+
+    setInterval(updatePeriod, 1000);
+    updatePeriod();
+
+    function handleHack() {
+        let currentFullPeriod = updatePeriod();
+
+        if (currentFullPeriod === lastPeriod) {
+            try { Android.showToast("Please wait for next period!"); } catch(e) {}
+            return;
+        }
+
+        document.getElementById('hack_btn').style.display = 'none';
+        document.getElementById('result-circle').style.display = 'none';
+        document.getElementById('loader-area').style.display = 'block';
+
+        let resCircle = document.getElementById('result-circle');
+        resCircle.style.display = 'flex';
+
+        let counter = 0;
+        let scrollInterval = setInterval(function() {
+            resCircle.innerHTML = Math.floor(Math.random() * 10);
+            counter++;
+            if (counter > 8) {
+                clearInterval(scrollInterval);
+                document.getElementById('loader-area').style.display = 'none';
+                
+                // Period last digit se number aur color determine karna
+                let lastDigit = parseInt(currentFullPeriod.slice(-1));
+                let baseColor = (lastDigit >= 5) ? "BIG" : "SMALL";
+                
+                // AI Engine update & prediction
+                aiEngine.updateHistory(lastDigit >= 5 ? 'RED' : 'GREEN', lastDigit);
+                let aiPrediction = aiEngine.predict();
+
+                let color = (baseColor === "BIG") ? "#39ff14" : "#ff0000";
+                
+                resCircle.innerHTML = baseColor + "<br><span style='font-size:8px;'>(" + lastDigit + ")</span>";
+                resCircle.style.borderColor = color;
+                resCircle.style.color = color;
+                resCircle.style.boxShadow = "0 0 10px " + color;
+
+                document.getElementById('hack_btn').style.display = 'block';
+                lastPeriod = currentFullPeriod;
+            }
+        }, 100);
+    }
+</script>
+
 </body>
 </html>
