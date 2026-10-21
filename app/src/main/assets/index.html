@@ -2,34 +2,40 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#030711">
 
-<title>VIP S_God Predictor</title>
+<title>VIP S_God</title>
 
 <style>
 * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
 }
 
 :root {
     --green: #00ff80;
     --cyan: #00eaff;
-    --bg: #030711;
+    --red: #ff496a;
+    --violet: #c68aff;
+}
+
+html {
+    min-height: 100%;
+    background: #030711;
 }
 
 body {
+    margin: 0;
     min-height: 100vh;
-    padding: 12px;
+    padding: 8px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    background:
-        radial-gradient(ellipse at top, #102b40 0%, transparent 60%),
-        linear-gradient(160deg, #02040b, #07121d, #02040b);
+    align-items: flex-start;
     color: white;
+    background:
+        radial-gradient(ellipse at top, #103c43, transparent 65%),
+        linear-gradient(160deg, #02040b, #07121d, #02040b);
     font-family: Arial, sans-serif;
 }
 
@@ -37,149 +43,164 @@ body {
     position: relative;
     isolation: isolate;
     width: 100%;
-    max-width: 480px;
-    min-height: 600px;
-    padding: 26px 22px;
+    max-width: 560px;
+    min-height: calc(100vh - 16px);
+    padding: 22px 16px;
     overflow: hidden;
     border: 2px solid #00ff8070;
-    border-radius: 26px;
-    background: linear-gradient(160deg, #081727, #050a14 65%);
+    border-radius: 24px;
+    background: linear-gradient(160deg, #081727, #050a14);
     box-shadow:
-        0 0 25px #00ff8030,
-        inset 0 0 25px #00ff8008;
+        0 0 24px #00ff8030,
+        inset 0 0 30px #00ff8008;
 }
 
 .app::before {
     content: "";
     position: absolute;
     z-index: -1;
-    top: -90px;
+    top: -100px;
     left: 50%;
     width: 280px;
-    height: 220px;
+    height: 240px;
     transform: translateX(-50%);
-    background: #00ff8025;
+    background: #00ff8020;
     filter: blur(55px);
     pointer-events: none;
 }
 
 .header {
     text-align: center;
-    padding: 8px 0 24px;
+    padding: 8px 0 22px;
 }
 
 .logo {
-    font-size: clamp(27px, 8vw, 36px);
+    color: var(--green);
+    font-size: clamp(30px, 9vw, 40px);
     font-weight: 900;
     letter-spacing: 3px;
-    color: var(--green);
-    text-shadow:
-        0 0 10px #00ff80,
-        0 0 25px #00ff8060;
+    text-shadow: 0 0 12px #00ff80, 0 0 28px #00ff8060;
 }
 
 .subtitle {
-    margin-top: 9px;
+    margin-top: 8px;
+    color: #a4c4d3;
     font-size: 11px;
     letter-spacing: 2px;
-    color: #9cb8c7;
 }
 
 .badge {
     display: inline-block;
-    margin-top: 14px;
+    margin-top: 13px;
     padding: 8px 15px;
     border: 1px solid #00ff8070;
-    border-radius: 30px;
+    border-radius: 25px;
     color: var(--green);
     background: #00ff8010;
     font-size: 11px;
     letter-spacing: 1px;
-    box-shadow: 0 0 12px #00ff8010;
 }
 
 .status {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    padding: 14px 10px;
-    margin-bottom: 20px;
-    border: 1px solid #1a3c48;
+    gap: 9px;
+    margin-bottom: 16px;
+    padding: 14px 8px;
+    border: 1px solid #29464e;
     border-radius: 12px;
     background: #06121c;
+    color: #c3dbe5;
     font-size: 12px;
     letter-spacing: 1px;
-    color: #b3cad6;
 }
 
 .dot {
-    flex-shrink: 0;
     width: 9px;
     height: 9px;
+    flex-shrink: 0;
     border-radius: 50%;
     background: var(--green);
     box-shadow: 0 0 12px var(--green);
-    animation: dotPulse 1.2s infinite alternate;
 }
 
-@keyframes dotPulse {
-    from { opacity: .45; }
-    to { opacity: 1; }
+.period-card {
+    padding: 18px 12px;
+    margin-bottom: 17px;
+    text-align: center;
+    border: 1px solid #00eaff65;
+    border-radius: 15px;
+    background: linear-gradient(120deg, #06252e, #071827);
+}
+
+.small-label {
+    color: #9cb9c9;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.period {
+    margin-top: 12px;
+    color: var(--cyan);
+    font-size: clamp(18px, 5.6vw, 27px);
+    font-weight: 900;
+    letter-spacing: .5px;
+    overflow-wrap: anywhere;
+    text-shadow: 0 0 12px #00eaff40;
+}
+
+.timer {
+    margin-top: 12px;
+    color: var(--green);
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.track {
+    height: 7px;
+    margin-top: 13px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #142b34;
+}
+
+.progress {
+    height: 100%;
+    width: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--green), var(--cyan));
+    transition: width .25s linear;
 }
 
 .result-card {
     position: relative;
-    padding: 28px 12px;
+    padding: 25px 10px;
+    overflow: hidden;
     text-align: center;
     border: 2px solid #00ff8055;
     border-radius: 20px;
     background:
         radial-gradient(ellipse at center, #06472b65, transparent 75%),
         #06111a;
-    overflow: hidden;
-    box-shadow: inset 0 0 25px #00ff800b;
-}
-
-.result-card::before,
-.result-card::after {
-    content: "";
-    position: absolute;
-    width: 110px;
-    height: 2px;
-    top: 25px;
-    background: linear-gradient(
-        90deg, transparent, var(--green), transparent
-    );
-    box-shadow: 0 0 12px var(--green);
-}
-
-.result-card::before {
-    left: -15px;
-    transform: rotate(35deg);
-}
-
-.result-card::after {
-    right: -15px;
-    transform: rotate(-35deg);
 }
 
 .wings {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 14px;
-    margin-bottom: 24px;
+    gap: 12px;
+    margin-bottom: 23px;
 }
 
 .wing {
-    width: clamp(55px, 17vw, 90px);
-    height: 34px;
+    width: clamp(50px, 16vw, 85px);
+    height: 32px;
     border-top: 2px solid var(--green);
     border-bottom: 1px solid #00ff8070;
     background: linear-gradient(180deg, #00ff8035, transparent);
     filter: drop-shadow(0 0 8px #00ff80);
-    animation: wingPulse 1.5s infinite alternate;
+    animation: wings 1.5s ease-in-out infinite alternate;
 }
 
 .wing.left {
@@ -196,7 +217,7 @@ body {
     );
 }
 
-@keyframes wingPulse {
+@keyframes wings {
     from {
         opacity: .45;
         transform: scaleX(.8);
@@ -207,131 +228,96 @@ body {
     }
 }
 
-.label {
-    font-size: 12px;
-    letter-spacing: 3px;
-    color: #a5d9bf;
-}
-
 .number {
     margin: 22px 0;
-    font-size: clamp(80px, 24vw, 110px);
-    line-height: 1.05;
-    font-weight: 900;
     color: var(--green);
-    text-shadow:
-        0 0 12px #00ff80,
-        0 0 35px #00ff8070;
-    overflow-wrap: anywhere;
+    font-size: clamp(90px, 27vw, 125px);
+    line-height: 1;
+    font-weight: 900;
+    text-shadow: 0 0 12px #00ff80, 0 0 35px #00ff8060;
 }
 
 .number.rolling {
-    animation: numberGlow .12s infinite alternate;
+    animation: rolling .13s infinite alternate;
 }
 
 .number.pop {
-    animation: pop .6s ease-out;
+    animation: pop .45s ease-out;
 }
 
-@keyframes numberGlow {
-    from {
-        opacity: .65;
-        transform: scale(.96);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1.04);
-    }
+@keyframes rolling {
+    from { opacity: .6; transform: scale(.96); }
+    to { opacity: 1; transform: scale(1.04); }
 }
 
 @keyframes pop {
-    0% {
-        opacity: 0;
-        transform: scale(.2) rotate(-10deg);
-    }
-    65% {
-        opacity: 1;
-        transform: scale(1.15) rotate(3deg);
-    }
-    100% {
-        transform: scale(1) rotate(0);
-    }
+    0% { opacity: 0; transform: scale(.4); }
+    70% { opacity: 1; transform: scale(1.12); }
+    100% { transform: scale(1); }
 }
 
 .prediction {
-    display: inline-block;
-    min-width: 200px;
-    max-width: 100%;
-    padding: 16px 24px;
+    display: block;
+    width: min(100%, 310px);
+    margin: 0 auto;
+    padding: 17px 12px;
     border: 2px solid var(--green);
     border-radius: 14px;
     color: var(--green);
     background: #00ff8012;
-    box-shadow: 0 0 25px #00ff8030;
-    font-size: clamp(23px, 7vw, 30px);
+    box-shadow: 0 0 24px #00ff8020;
+    font-size: clamp(25px, 7vw, 34px);
     font-weight: 900;
     letter-spacing: 3px;
-    transition: .3s;
+    overflow-wrap: anywhere;
 }
 
 .prediction.red {
-    color: #ff496a;
-    border-color: #ff496a;
+    color: var(--red);
+    border-color: var(--red);
     background: #ff174412;
-    box-shadow: 0 0 25px #ff174430;
+    box-shadow: 0 0 24px #ff174425;
 }
 
 .prediction.green {
-    color: #00ff80;
-    border-color: #00ff80;
-    background: #00ff8012;
+    color: var(--green);
+    border-color: var(--green);
 }
 
 .prediction.violet {
-    color: #c68aff;
-    border-color: #c68aff;
+    color: var(--violet);
+    border-color: var(--violet);
     background: #9b42ff12;
-    box-shadow: 0 0 25px #9b42ff30;
+    box-shadow: 0 0 24px #9b42ff25;
 }
 
-.result-caption {
-    margin-top: 18px;
+.caption {
+    margin-top: 17px;
+    color: #9cb5c5;
     font-size: 11px;
-    line-height: 1.6;
-    color: #8ea5b7;
+    line-height: 1.7;
     letter-spacing: 1px;
 }
 
 .popup {
-    position: relative;
-    margin-top: 24px;
-    padding: 25px 16px;
-    min-height: 135px;
-    border: 2px solid #00eaff70;
-    border-radius: 17px;
-    background: linear-gradient(120deg, #06333b, #071827);
+    margin-top: 18px;
+    padding: 23px 12px;
+    min-height: 130px;
     text-align: center;
-    opacity: .7;
-    transform: scale(.97);
-    transition: .3s;
+    border: 2px solid #00eaff70;
+    border-radius: 16px;
+    background: linear-gradient(120deg, #06333b, #071827);
+    transition: box-shadow .3s;
 }
 
 .popup.show {
-    opacity: 1;
-    transform: scale(1);
-    box-shadow:
-        0 0 25px #00eaff25,
-        inset 0 0 20px #00eaff08;
-    animation: popupIn .5s ease;
+    box-shadow: 0 0 25px #00eaff25;
+    animation: popupIn .4s ease-out;
 }
 
 @keyframes popupIn {
-    0% {
-        transform: translateY(12px) scale(.92);
-    }
-    100% {
-        transform: translateY(0) scale(1);
-    }
+    from { opacity: .5; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .popup-title {
@@ -341,115 +327,76 @@ body {
 }
 
 .popup-value {
-    margin-top: 14px;
-    font-size: clamp(21px, 6vw, 27px);
-    line-height: 1.4;
+    margin-top: 13px;
+    font-size: clamp(22px, 6vw, 29px);
     font-weight: 900;
     overflow-wrap: anywhere;
 }
 
 .popup-detail {
     margin-top: 10px;
-    color: #91b6c5;
-    font-size: 13px;
-    line-height: 1.5;
+    color: #9bb8c6;
+    font-size: 12px;
+    line-height: 1.6;
 }
 
 .controls {
-    margin-top: 22px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 11px;
+    margin-top: 20px;
 }
 
 button {
     width: 100%;
-    min-height: 55px;
+    min-height: 54px;
     padding: 12px;
-    border: 0;
+    border: none;
     border-radius: 12px;
-    background: linear-gradient(100deg, #00ff80, #00eaff);
     color: #03120e;
-    font-size: 15px;
+    background: linear-gradient(100deg, #00ff80, #00eaff);
+    font-size: 14px;
     font-weight: 900;
     letter-spacing: 1px;
     cursor: pointer;
-    box-shadow: 0 0 22px #00ff8025;
-    transition: transform .2s;
-}
-
-button:active {
-    transform: scale(.98);
 }
 
 button:disabled {
-    opacity: .6;
-    cursor: wait;
+    opacity: .65;
+    cursor: default;
 }
 
 .secondary {
-    margin-top: 12px;
-    min-height: 45px;
-    color: #b7d2df;
+    min-height: 44px;
+    color: #c4d9e2;
     border: 1px solid #29414e;
     background: #0a1621;
-    box-shadow: none;
-    font-size: 12px;
 }
 
 .footer {
-    margin-top: 20px;
+    margin-top: 19px;
     text-align: center;
-    color: #718a99;
+    color: #78909e;
     font-size: 10px;
     line-height: 1.8;
 }
 
-@media (max-width: 360px) {
-    body {
-        padding: 8px;
-    }
-
-    .app {
-        padding: 20px 14px;
-        border-radius: 20px;
-    }
-
-    .result-card {
-        padding: 22px 8px;
-    }
-
-    .wings {
-        gap: 8px;
-    }
-
-    .prediction {
-        min-width: 170px;
-        padding: 14px 16px;
-    }
-}
-
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: .01ms !important;
+        animation: none !important;
+        transition: none !important;
     }
 }
 </style>
 </head>
 
 <body>
-
 <main class="app">
 
     <header class="header">
         <div class="logo">⚡ S_GOD ⚡</div>
-
-        <div class="subtitle">
-            PREMIUM ANIMATION SYSTEM
-        </div>
-
-        <div class="badge">
-            ✦ NEON EDITION ✦
-        </div>
+        <div class="subtitle">PREMIUM ANIMATION SYSTEM</div>
+        <div class="badge">✦ NEON EDITION ✦</div>
     </header>
 
     <div class="status">
@@ -457,59 +404,60 @@ button:disabled {
         <span id="status">SYSTEM READY</span>
     </div>
 
-    <section class="result-card">
+    <section class="period-card">
+        <div class="small-label">CURRENT PERIOD</div>
+        <div class="period" id="period">20261021100011267</div>
 
+        <div class="small-label" style="margin-top:14px">
+            NEXT PERIOD IN
+        </div>
+
+        <div class="timer" id="timer">01:00</div>
+
+        <div class="track">
+            <div class="progress" id="progress"></div>
+        </div>
+    </section>
+
+    <section class="result-card">
         <div class="wings">
             <div class="wing left"></div>
-            <div class="label">RESULT</div>
+            <div class="small-label">RESULT</div>
             <div class="wing right"></div>
         </div>
 
-        <div class="label">NUMBER DISPLAY</div>
+        <div class="small-label">PERIOD DEMO NUMBER</div>
 
         <div class="number" id="number">?</div>
 
-        <div class="prediction" id="prediction">
-            READY
-        </div>
+        <div class="prediction" id="prediction">WAITING</div>
 
-        <div class="result-caption" id="caption">
-            PRESS START TO PLAY ANIMATION
+        <div class="caption" id="caption">
+            PERIOD RESULT WILL APPEAR HERE
         </div>
-
     </section>
 
     <section class="popup" id="popup">
-
-        <div class="popup-title">
-            ✦ RESULT SHOWCASE ✦
-        </div>
-
-        <div class="popup-value" id="popupValue">
-            Waiting for animation
-        </div>
-
+        <div class="popup-title">✦ PERIOD RESULT ✦</div>
+        <div class="popup-value" id="popupValue">Waiting...</div>
         <div class="popup-detail" id="popupDetail">
-            Number and colour visual demo
+            Demo only — not a real prediction
         </div>
-
     </section>
 
     <div class="controls">
-
         <button id="startBtn" type="button">
             ⚡ START ANIMATION
         </button>
 
         <button class="secondary" id="resetBtn" type="button">
-            ↻ RESET
+            ↻ RESET ANIMATION
         </button>
-
     </div>
 
     <footer class="footer">
-        S_GOD • NEON ANIMATION UI<br>
-        VISUAL DEMO ONLY — NOT A REAL PREDICTION
+        S_GOD • NEON UI<br>
+        RANDOM DEMO — NOT A REAL GAME PREDICTION
     </footer>
 
 </main>
@@ -517,161 +465,310 @@ button:disabled {
 <script>
 "use strict";
 
-const numberEl = document.getElementById("number");
-const predictionEl = document.getElementById("prediction");
-const statusEl = document.getElementById("status");
-const captionEl = document.getElementById("caption");
-const popupEl = document.getElementById("popup");
-const popupValueEl = document.getElementById("popupValue");
-const popupDetailEl = document.getElementById("popupDetail");
-const startBtn = document.getElementById("startBtn");
-const resetBtn = document.getElementById("resetBtn");
+(function () {
+    const $ = id => document.getElementById(id);
 
-let running = false;
-let intervalId = null;
+    const el = {
+        period: $("period"),
+        timer: $("timer"),
+        progress: $("progress"),
+        status: $("status"),
+        number: $("number"),
+        prediction: $("prediction"),
+        caption: $("caption"),
+        popup: $("popup"),
+        popupValue: $("popupValue"),
+        popupDetail: $("popupDetail"),
+        start: $("startBtn"),
+        reset: $("resetBtn")
+    };
 
-function setNumberStyle(number) {
-    predictionEl.classList.remove(
-        "red",
-        "green",
-        "violet"
-    );
+    const STORAGE_KEY = "sgod_demo_period_v1";
+    const START_PERIOD = "20261021100011267";
+    const PERIOD_MS = 60000;
 
-    let colour;
+    let period = START_PERIOD;
+    let nextChange = 0;
+    let clockId = null;
+    let animationId = null;
+    let animationRunning = false;
+    let activeToken = 0;
+    let shownPeriod = "";
 
-    if ([1, 3, 7, 9].includes(number)) {
-        colour = "GREEN";
-        predictionEl.classList.add("green");
-    } else if ([2, 4, 6, 8].includes(number)) {
-        colour = "RED";
-        predictionEl.classList.add("red");
-    } else {
-        colour = "VIOLET";
-        predictionEl.classList.add("violet");
+    function safeLoad() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+
+            if (!raw) return null;
+
+            const data = JSON.parse(raw);
+
+            if (
+                typeof data.period === "string" &&
+                /^\d{1,30}$/.test(data.period) &&
+                Number.isFinite(data.nextChange)
+            ) {
+                return data;
+            }
+        } catch (error) {
+            console.warn("Saved demo state unavailable.");
+        }
+
+        return null;
     }
 
-    const size = number >= 5 ? "BIG" : "SMALL";
+    function safeSave() {
+        try {
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify({
+                    period: period,
+                    nextChange: nextChange
+                })
+            );
+        } catch (error) {
+            // The page can continue even if storage is unavailable.
+        }
+    }
 
-    return { colour, size };
-}
+    function incrementPeriod(value) {
+        try {
+            return (BigInt(value) + 1n).toString();
+        } catch (error) {
+            return value;
+        }
+    }
 
-function startAnimation() {
-    if (running) return;
+    function demoResult(periodValue) {
+        /*
+          Repeatable illustrative result for this period.
+          This is NOT a prediction of a real game outcome.
+        */
+        let hash = 0;
 
-    running = true;
+        for (let i = 0; i < periodValue.length; i++) {
+            hash = (hash * 31 + periodValue.charCodeAt(i)) >>> 0;
+        }
 
-    startBtn.disabled = true;
-    resetBtn.disabled = true;
+        const number = hash % 10;
+        const size = number >= 5 ? "BIG" : "SMALL";
 
-    statusEl.textContent = "ANIMATION RUNNING...";
-    captionEl.textContent = "GENERATING VISUAL EFFECTS...";
+        let colour;
 
-    popupEl.classList.remove("show");
+        if ([1, 3, 7, 9].includes(number)) {
+            colour = "GREEN";
+        } else if ([2, 4, 6, 8].includes(number)) {
+            colour = "RED";
+        } else {
+            colour = "VIOLET";
+        }
 
-    predictionEl.textContent = "LOADING";
-    popupValueEl.textContent = "Please wait...";
-    popupDetailEl.textContent =
-        "Number animation in progress";
+        return { number, size, colour };
+    }
 
-    numberEl.classList.remove("pop");
-    numberEl.classList.add("rolling");
+    function renderResult(animate) {
+        const result = demoResult(period);
 
-    let ticks = 0;
-    const maxTicks = 30;
+        el.number.classList.remove("rolling", "pop");
+        el.prediction.classList.remove("red", "green", "violet");
 
-    intervalId = setInterval(() => {
-        const n = Math.floor(Math.random() * 10);
+        el.number.textContent = result.number;
+        el.prediction.textContent = result.size;
+        el.prediction.classList.add(result.colour.toLowerCase());
 
-        numberEl.textContent = n;
-        ticks++;
+        el.popupValue.textContent =
+            result.size + " • " + result.colour;
 
-        if (ticks >= maxTicks) {
-            clearInterval(intervalId);
-            intervalId = null;
+        el.popupDetail.textContent =
+            "Period: " + period + " • Demo only";
 
-            const finalNumber =
+        el.caption.textContent =
+            "PERIOD " + period + " • DEMO RESULT";
+
+        el.period.textContent = period;
+        el.popup.classList.add("show");
+
+        if (animate) {
+            void el.number.offsetWidth;
+            el.number.classList.add("pop");
+        }
+
+        shownPeriod = period;
+    }
+
+    function stopAnimation() {
+        activeToken++;
+
+        if (animationId !== null) {
+            clearInterval(animationId);
+            animationId = null;
+        }
+
+        animationRunning = false;
+        el.number.classList.remove("rolling");
+        el.start.disabled = false;
+        el.reset.disabled = false;
+    }
+
+    function startAnimation() {
+        if (animationRunning) return;
+
+        animationRunning = true;
+        const token = ++activeToken;
+
+        el.start.disabled = true;
+        el.reset.disabled = true;
+        el.status.textContent = "ANIMATION RUNNING";
+
+        el.popup.classList.remove("show");
+        el.number.classList.remove("pop");
+        el.number.classList.add("rolling");
+        el.prediction.textContent = "LOADING";
+
+        let ticks = 0;
+        const maxTicks = 20;
+
+        animationId = setInterval(function () {
+            if (token !== activeToken) {
+                clearInterval(animationId);
+                animationId = null;
+                return;
+            }
+
+            el.number.textContent =
                 Math.floor(Math.random() * 10);
 
-            const result = setNumberStyle(finalNumber);
+            ticks++;
 
-            numberEl.textContent = finalNumber;
+            if (ticks >= maxTicks) {
+                clearInterval(animationId);
+                animationId = null;
 
-            numberEl.classList.remove("rolling");
-            numberEl.classList.remove("pop");
+                el.number.classList.remove("rolling");
 
-            /* Restart the final number animation. */
-            void numberEl.offsetWidth;
+                renderResult(true);
 
-            numberEl.classList.add("pop");
+                el.status.textContent =
+                    "PERIOD DEMO READY";
 
-            predictionEl.textContent = result.size;
-
-            popupValueEl.textContent =
-                result.size + " • " + result.colour;
-
-            popupDetailEl.textContent =
-                "Demo number: " + finalNumber +
-                " | Visual result only";
-
-            captionEl.textContent =
-                "NUMBER " + finalNumber +
-                " • DEMO RESULT";
-
-            statusEl.textContent =
-                "ANIMATION COMPLETE";
-
-            popupEl.classList.add("show");
-
-            startBtn.disabled = false;
-            resetBtn.disabled = false;
-
-            startBtn.textContent = "↻ PLAY AGAIN";
-
-            running = false;
-        }
-    }, 90);
-}
-
-function resetAnimation() {
-    if (intervalId !== null) {
-        clearInterval(intervalId);
-        intervalId = null;
+                animationRunning = false;
+                el.start.disabled = false;
+                el.reset.disabled = false;
+                el.start.textContent = "↻ REPLAY ANIMATION";
+            }
+        }, 100);
     }
 
-    running = false;
+    function updateClock() {
+        const now = Date.now();
 
-    numberEl.classList.remove("rolling", "pop");
+        if (!nextChange || nextChange <= now) {
+            const expired = nextChange > 0;
 
-    predictionEl.classList.remove(
-        "red",
-        "green",
-        "violet"
-    );
+            if (expired) {
+                const periodsPassed =
+                    Math.floor((now - nextChange) / PERIOD_MS) + 1;
 
-    numberEl.textContent = "?";
-    predictionEl.textContent = "READY";
+                const safeSteps = Math.min(periodsPassed, 100000);
 
-    statusEl.textContent = "SYSTEM READY";
+                for (let i = 0; i < safeSteps; i++) {
+                    period = incrementPeriod(period);
+                }
 
-    captionEl.textContent =
-        "PRESS START TO PLAY ANIMATION";
+                nextChange += safeSteps * PERIOD_MS;
 
-    popupValueEl.textContent =
-        "Waiting for animation";
+                stopAnimation();
+                el.start.textContent = "⚡ START ANIMATION";
+                renderResult(false);
+                el.status.textContent = "NEW PERIOD READY";
+                safeSave();
+            } else {
+                nextChange = now + PERIOD_MS;
+            }
+        }
 
-    popupDetailEl.textContent =
-        "Number and colour visual demo";
+        const remaining = Math.max(0, nextChange - now);
+        const seconds = Math.ceil(remaining / 1000);
 
-    popupEl.classList.remove("show");
+        const minutesText = String(Math.floor(seconds / 60))
+            .padStart(2, "0");
 
-    startBtn.disabled = false;
-    resetBtn.disabled = false;
+        const secondsText = String(seconds % 60)
+            .padStart(2, "0");
 
-    startBtn.textContent = "⚡ START ANIMATION";
-}
+        el.timer.textContent = minutesText + ":" + secondsText;
 
-startBtn.addEventListener("click", startAnimation);
-resetBtn.addEventListener("click", resetAnimation);
+        el.progress.style.width =
+            (remaining / PERIOD_MS * 100) + "%";
+    }
+
+    function resetAnimation() {
+        stopAnimation();
+
+        el.number.classList.remove("pop", "rolling");
+        el.number.textContent = "?";
+        el.prediction.className = "prediction";
+        el.prediction.textContent = "WAITING";
+
+        el.caption.textContent =
+            "PRESS START TO PLAY ANIMATION";
+
+        el.popup.classList.remove("show");
+        el.popupValue.textContent = "Waiting...";
+        el.popupDetail.textContent =
+            "Demo only — not a real prediction";
+
+        el.start.textContent = "⚡ START ANIMATION";
+        el.status.textContent = "SYSTEM READY";
+    }
+
+    const saved = safeLoad();
+
+    if (saved) {
+        period = saved.period;
+
+        if (saved.nextChange > Date.now()) {
+            nextChange = saved.nextChange;
+        } else {
+            const missed =
+                Math.floor(
+                    (Date.now() - saved.nextChange) / PERIOD_MS
+                ) + 1;
+
+            const safeMissed = Math.min(missed, 100000);
+
+            for (let i = 0; i < safeMissed; i++) {
+                period = incrementPeriod(period);
+            }
+
+            nextChange = saved.nextChange + safeMissed * PERIOD_MS;
+        }
+    } else {
+        nextChange = Date.now() + PERIOD_MS;
+    }
+
+    el.period.textContent = period;
+
+    renderResult(false);
+    el.status.textContent = "SYSTEM READY";
+
+    el.start.addEventListener("click", startAnimation);
+    el.reset.addEventListener("click", resetAnimation);
+
+    updateClock();
+    clockId = setInterval(updateClock, 250);
+
+    safeSave();
+
+    window.addEventListener("pagehide", function () {
+        if (clockId !== null) {
+            clearInterval(clockId);
+            clockId = null;
+        }
+
+        stopAnimation();
+    });
+})();
 </script>
 
 </body>
