@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#030711">
 
 <title>VIP S_God Predictor</title>
@@ -21,28 +21,27 @@
 }
 
 body {
-    min-height: 100vh;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
     padding: 0;
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    background:
-        radial-gradient(ellipse at top, #102b40 0%, transparent 60%),
-        linear-gradient(160deg, #02040b, #07121d, #02040b);
+    justify-content: center;
+    align-items: center;
+    background: transparent;
     color: white;
     font-family: Arial, sans-serif;
-    position: relative;
     overflow: hidden;
 }
 
 .app {
-    position: absolute; /* Left aur Top margin set karne ke liye */
+    position: relative;
     isolation: isolate;
-    width: 414px;  /* Exact requested width */
-    height: 587px; /* Exact requested height */
-    left: 76px;    /* Exact requested left margin */
-    top: 98px;     /* Exact requested top margin */
-    padding: 24px 20px;
+    width: 95vw;
+    max-width: 414px;  /* Tera bataya hua max width */
+    height: 92vh;
+    max-height: 587px; /* Tera bataya hua max height */
+    padding: 20px 16px;
     overflow: hidden;
     border: 2px solid #00ff8070;
     border-radius: 26px;
@@ -71,11 +70,11 @@ body {
 
 .header {
     text-align: center;
-    padding: 4px 0 10px;
+    padding: 2px 0 6px;
 }
 
 .logo {
-    font-size: clamp(24px, 6vw, 32px);
+    font-size: clamp(22px, 5vw, 28px);
     font-weight: 900;
     letter-spacing: 3px;
     color: var(--green);
@@ -85,21 +84,21 @@ body {
 }
 
 .subtitle {
-    margin-top: 5px;
-    font-size: 10px;
+    margin-top: 3px;
+    font-size: 9px;
     letter-spacing: 2px;
     color: #9cb8c7;
 }
 
 .badge {
     display: inline-block;
-    margin-top: 8px;
-    padding: 5px 12px;
+    margin-top: 6px;
+    padding: 4px 10px;
     border: 1px solid #00ff8070;
     border-radius: 30px;
     color: var(--green);
     background: #00ff8010;
-    font-size: 10px;
+    font-size: 9px;
     letter-spacing: 1px;
     box-shadow: 0 0 12px #00ff8010;
 }
@@ -109,20 +108,20 @@ body {
     justify-content: center;
     align-items: center;
     gap: 8px;
-    padding: 10px 8px;
-    margin-bottom: 10px;
+    padding: 8px 6px;
+    margin-bottom: 6px;
     border: 1px solid #1a3c48;
     border-radius: 10px;
     background: #06121c;
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 1px;
     color: #b3cad6;
 }
 
 .dot {
     flex-shrink: 0;
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: var(--green);
     box-shadow: 0 0 12px var(--green);
@@ -136,7 +135,7 @@ body {
 
 .result-card {
     position: relative;
-    padding: 16px 10px;
+    padding: 12px 8px;
     text-align: center;
     border: 2px solid #00ff8055;
     border-radius: 16px;
@@ -153,7 +152,7 @@ body {
     position: absolute;
     width: 110px;
     height: 2px;
-    top: 18px;
+    top: 15px;
     background: linear-gradient(
         90deg, transparent, var(--green), transparent
     );
@@ -174,13 +173,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
+    gap: 10px;
+    margin-bottom: 8px;
 }
 
 .wing {
-    width: clamp(45px, 14vw, 75px);
-    height: 26px;
+    width: clamp(40px, 12vw, 65px);
+    height: 22px;
     border-top: 2px solid var(--green);
     border-bottom: 1px solid #00ff8070;
     background: linear-gradient(180deg, #00ff8035, transparent);
@@ -214,14 +213,14 @@ body {
 }
 
 .label {
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 3px;
     color: #a5d9bf;
 }
 
 .number {
-    margin: 10px 0;
-    font-size: clamp(65px, 18vw, 85px);
+    margin: 6px 0;
+    font-size: clamp(55px, 15vw, 75px);
     line-height: 1.05;
     font-weight: 900;
     color: var(--green);
@@ -266,15 +265,15 @@ body {
 
 .prediction {
     display: inline-block;
-    min-width: 170px;
+    min-width: 150px;
     max-width: 100%;
-    padding: 10px 18px;
+    padding: 8px 14px;
     border: 2px solid var(--green);
-    border-radius: 12px;
+    border-radius: 10px;
     color: var(--green);
     background: #00ff8012;
     box-shadow: 0 0 25px #00ff8030;
-    font-size: clamp(20px, 6vw, 26px);
+    font-size: clamp(18px, 5vw, 24px);
     font-weight: 900;
     letter-spacing: 3px;
     transition: .3s;
@@ -301,17 +300,17 @@ body {
 }
 
 .result-caption {
-    margin-top: 10px;
-    font-size: 10px;
-    line-height: 1.4;
+    margin-top: 6px;
+    font-size: 9px;
+    line-height: 1.3;
     color: #8ea5b7;
     letter-spacing: 1px;
 }
 
 .popup {
     position: relative;
-    margin-top: 10px;
-    padding: 14px 12px;
+    margin-top: 8px;
+    padding: 10px 10px;
     border: 2px solid #00eaff70;
     border-radius: 14px;
     background: linear-gradient(120deg, #06333b, #071827);
@@ -341,38 +340,38 @@ body {
 
 .popup-title {
     color: var(--cyan);
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 2px;
 }
 
 .popup-value {
-    margin-top: 6px;
-    font-size: clamp(18px, 5vw, 22px);
-    line-height: 1.3;
+    margin-top: 4px;
+    font-size: clamp(16px, 4vw, 20px);
+    line-height: 1.2;
     font-weight: 900;
     overflow-wrap: anywhere;
 }
 
 .popup-detail {
-    margin-top: 4px;
+    margin-top: 2px;
     color: #91b6c5;
-    font-size: 11px;
-    line-height: 1.4;
+    font-size: 10px;
+    line-height: 1.3;
 }
 
 .controls {
-    margin-top: 10px;
+    margin-top: 6px;
 }
 
 button {
     width: 100%;
-    min-height: 44px;
-    padding: 10px;
+    min-height: 40px;
+    padding: 8px;
     border: 0;
     border-radius: 10px;
     background: linear-gradient(100deg, #00ff80, #00eaff);
     color: #03120e;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 900;
     letter-spacing: 1px;
     cursor: pointer;
@@ -390,21 +389,21 @@ button:disabled {
 }
 
 .secondary {
-    margin-top: 8px;
-    min-height: 38px;
+    margin-top: 6px;
+    min-height: 34px;
     color: #b7d2df;
     border: 1px solid #29414e;
     background: #0a1621;
     box-shadow: none;
-    font-size: 11px;
+    font-size: 10px;
 }
 
 .footer {
-    margin-top: 8px;
+    margin-top: 6px;
     text-align: center;
     color: #718a99;
-    font-size: 9px;
-    line-height: 1.5;
+    font-size: 8px;
+    line-height: 1.4;
 }
 
 @media (prefers-reduced-motion: reduce) {
