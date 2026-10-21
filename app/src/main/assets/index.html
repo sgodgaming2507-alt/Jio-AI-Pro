@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#030711">
+
 <title>VIP S_God Predictor</title>
 
 <style>
@@ -20,12 +22,12 @@
 
 body {
     min-height: 100vh;
-    padding: 22px 12px;
+    padding: 12px;
     display: flex;
     justify-content: center;
     align-items: center;
     background:
-        radial-gradient(ellipse at top, #102b40 0%, transparent 55%),
+        radial-gradient(ellipse at top, #102b40 0%, transparent 60%),
         linear-gradient(160deg, #02040b, #07121d, #02040b);
     color: white;
     font-family: Arial, sans-serif;
@@ -33,115 +35,132 @@ body {
 
 .app {
     position: relative;
+    isolation: isolate;
     width: 100%;
-    max-width: 390px;
-    padding: 20px;
+    max-width: 480px;
+    min-height: 600px;
+    padding: 26px 22px;
     overflow: hidden;
-    border: 1px solid #00ff8060;
-    border-radius: 22px;
+    border: 2px solid #00ff8070;
+    border-radius: 26px;
     background: linear-gradient(160deg, #081727, #050a14 65%);
-    box-shadow: 0 0 30px #00ff8020;
+    box-shadow:
+        0 0 25px #00ff8030,
+        inset 0 0 25px #00ff8008;
 }
 
 .app::before {
     content: "";
     position: absolute;
+    z-index: -1;
     top: -90px;
     left: 50%;
-    width: 250px;
-    height: 180px;
+    width: 280px;
+    height: 220px;
     transform: translateX(-50%);
-    background: #00ff8018;
-    filter: blur(45px);
+    background: #00ff8025;
+    filter: blur(55px);
     pointer-events: none;
 }
 
 .header {
-    position: relative;
     text-align: center;
-    padding: 8px 0 20px;
+    padding: 8px 0 24px;
 }
 
 .logo {
-    font-size: 27px;
+    font-size: clamp(27px, 8vw, 36px);
     font-weight: 900;
     letter-spacing: 3px;
     color: var(--green);
-    text-shadow: 0 0 10px #00ff80, 0 0 25px #00ff8060;
+    text-shadow:
+        0 0 10px #00ff80,
+        0 0 25px #00ff8060;
 }
 
 .subtitle {
-    margin-top: 7px;
-    font-size: 10px;
-    letter-spacing: 3px;
+    margin-top: 9px;
+    font-size: 11px;
+    letter-spacing: 2px;
     color: #9cb8c7;
 }
 
 .badge {
     display: inline-block;
-    margin-top: 13px;
-    padding: 6px 12px;
-    border: 1px solid #00ff8060;
-    border-radius: 20px;
+    margin-top: 14px;
+    padding: 8px 15px;
+    border: 1px solid #00ff8070;
+    border-radius: 30px;
     color: var(--green);
-    background: #00ff800c;
-    font-size: 10px;
+    background: #00ff8010;
+    font-size: 11px;
     letter-spacing: 1px;
+    box-shadow: 0 0 12px #00ff8010;
 }
 
 .status {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-    padding: 12px;
-    margin-bottom: 17px;
+    gap: 10px;
+    padding: 14px 10px;
+    margin-bottom: 20px;
     border: 1px solid #1a3c48;
-    border-radius: 10px;
+    border-radius: 12px;
     background: #06121c;
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 1px;
     color: #b3cad6;
 }
 
 .dot {
-    width: 7px;
-    height: 7px;
+    flex-shrink: 0;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
     background: var(--green);
-    box-shadow: 0 0 10px var(--green);
+    box-shadow: 0 0 12px var(--green);
+    animation: dotPulse 1.2s infinite alternate;
+}
+
+@keyframes dotPulse {
+    from { opacity: .45; }
+    to { opacity: 1; }
 }
 
 .result-card {
     position: relative;
-    padding: 22px 12px;
+    padding: 28px 12px;
     text-align: center;
-    border: 1px solid #00ff8055;
-    border-radius: 17px;
+    border: 2px solid #00ff8055;
+    border-radius: 20px;
     background:
-        radial-gradient(ellipse at center, #06472b50, transparent 70%),
+        radial-gradient(ellipse at center, #06472b65, transparent 75%),
         #06111a;
     overflow: hidden;
+    box-shadow: inset 0 0 25px #00ff800b;
 }
 
 .result-card::before,
 .result-card::after {
     content: "";
     position: absolute;
-    width: 100px;
+    width: 110px;
     height: 2px;
-    top: 20px;
-    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    top: 25px;
+    background: linear-gradient(
+        90deg, transparent, var(--green), transparent
+    );
     box-shadow: 0 0 12px var(--green);
 }
 
 .result-card::before {
-    left: -20px;
+    left: -15px;
     transform: rotate(35deg);
 }
 
 .result-card::after {
-    right: -20px;
+    right: -15px;
     transform: rotate(-35deg);
 }
 
@@ -149,26 +168,32 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 10px;
+    gap: 14px;
+    margin-bottom: 24px;
 }
 
 .wing {
-    width: 72px;
-    height: 28px;
+    width: clamp(55px, 17vw, 90px);
+    height: 34px;
     border-top: 2px solid var(--green);
     border-bottom: 1px solid #00ff8070;
-    background: linear-gradient(180deg, #00ff8025, transparent);
-    filter: drop-shadow(0 0 7px #00ff80);
+    background: linear-gradient(180deg, #00ff8035, transparent);
+    filter: drop-shadow(0 0 8px #00ff80);
     animation: wingPulse 1.5s infinite alternate;
 }
 
 .wing.left {
-    clip-path: polygon(0 0, 100% 25%, 75% 50%, 100% 75%, 0 100%, 25% 50%);
+    clip-path: polygon(
+        0 0, 100% 25%, 75% 50%,
+        100% 75%, 0 100%, 25% 50%
+    );
 }
 
 .wing.right {
-    clip-path: polygon(0 25%, 100% 0, 75% 50%, 100% 100%, 0 75%, 25% 50%);
+    clip-path: polygon(
+        0 25%, 100% 0, 75% 50%,
+        100% 100%, 0 75%, 25% 50%
+    );
 }
 
 @keyframes wingPulse {
@@ -183,18 +208,21 @@ body {
 }
 
 .label {
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 3px;
     color: #a5d9bf;
 }
 
 .number {
-    margin: 12px 0;
-    font-size: 82px;
+    margin: 22px 0;
+    font-size: clamp(80px, 24vw, 110px);
     line-height: 1.05;
     font-weight: 900;
     color: var(--green);
-    text-shadow: 0 0 8px #00ff80, 0 0 28px #00ff8060;
+    text-shadow:
+        0 0 12px #00ff80,
+        0 0 35px #00ff8070;
+    overflow-wrap: anywhere;
 }
 
 .number.rolling {
@@ -223,7 +251,7 @@ body {
     }
     65% {
         opacity: 1;
-        transform: scale(1.2) rotate(3deg);
+        transform: scale(1.15) rotate(3deg);
     }
     100% {
         transform: scale(1) rotate(0);
@@ -232,16 +260,17 @@ body {
 
 .prediction {
     display: inline-block;
-    min-width: 155px;
-    padding: 12px 20px;
-    border: 1px solid var(--green);
-    border-radius: 10px;
+    min-width: 200px;
+    max-width: 100%;
+    padding: 16px 24px;
+    border: 2px solid var(--green);
+    border-radius: 14px;
     color: var(--green);
     background: #00ff8012;
-    box-shadow: 0 0 20px #00ff8015;
-    font-size: 22px;
+    box-shadow: 0 0 25px #00ff8030;
+    font-size: clamp(23px, 7vw, 30px);
     font-weight: 900;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     transition: .3s;
 }
 
@@ -249,7 +278,7 @@ body {
     color: #ff496a;
     border-color: #ff496a;
     background: #ff174412;
-    box-shadow: 0 0 20px #ff174420;
+    box-shadow: 0 0 25px #ff174430;
 }
 
 .prediction.green {
@@ -262,24 +291,27 @@ body {
     color: #c68aff;
     border-color: #c68aff;
     background: #9b42ff12;
+    box-shadow: 0 0 25px #9b42ff30;
 }
 
 .result-caption {
-    margin-top: 13px;
-    font-size: 10px;
+    margin-top: 18px;
+    font-size: 11px;
+    line-height: 1.6;
     color: #8ea5b7;
     letter-spacing: 1px;
 }
 
 .popup {
     position: relative;
-    margin-top: 18px;
-    padding: 15px;
-    border: 1px solid #00eaff60;
-    border-radius: 12px;
+    margin-top: 24px;
+    padding: 25px 16px;
+    min-height: 135px;
+    border: 2px solid #00eaff70;
+    border-radius: 17px;
     background: linear-gradient(120deg, #06333b, #071827);
     text-align: center;
-    opacity: .6;
+    opacity: .7;
     transform: scale(.97);
     transition: .3s;
 }
@@ -287,7 +319,9 @@ body {
 .popup.show {
     opacity: 1;
     transform: scale(1);
-    box-shadow: 0 0 22px #00eaff20;
+    box-shadow:
+        0 0 25px #00eaff25,
+        inset 0 0 20px #00eaff08;
     animation: popupIn .5s ease;
 }
 
@@ -302,39 +336,43 @@ body {
 
 .popup-title {
     color: var(--cyan);
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 2px;
 }
 
 .popup-value {
-    margin-top: 8px;
-    font-size: 19px;
-    font-weight: bold;
+    margin-top: 14px;
+    font-size: clamp(21px, 6vw, 27px);
+    line-height: 1.4;
+    font-weight: 900;
+    overflow-wrap: anywhere;
 }
 
 .popup-detail {
-    margin-top: 6px;
+    margin-top: 10px;
     color: #91b6c5;
-    font-size: 11px;
+    font-size: 13px;
+    line-height: 1.5;
 }
 
 .controls {
-    margin-top: 18px;
+    margin-top: 22px;
 }
 
 button {
     width: 100%;
-    min-height: 49px;
+    min-height: 55px;
+    padding: 12px;
     border: 0;
-    border-radius: 10px;
+    border-radius: 12px;
     background: linear-gradient(100deg, #00ff80, #00eaff);
     color: #03120e;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 900;
     letter-spacing: 1px;
     cursor: pointer;
-    box-shadow: 0 0 20px #00ff8020;
-    transition: .2s;
+    box-shadow: 0 0 22px #00ff8025;
+    transition: transform .2s;
 }
 
 button:active {
@@ -342,26 +380,50 @@ button:active {
 }
 
 button:disabled {
-    opacity: .55;
+    opacity: .6;
     cursor: wait;
 }
 
 .secondary {
-    margin-top: 10px;
-    min-height: 40px;
+    margin-top: 12px;
+    min-height: 45px;
     color: #b7d2df;
     border: 1px solid #29414e;
     background: #0a1621;
     box-shadow: none;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .footer {
-    margin-top: 17px;
+    margin-top: 20px;
     text-align: center;
-    color: #607b8b;
-    font-size: 9px;
-    line-height: 1.7;
+    color: #718a99;
+    font-size: 10px;
+    line-height: 1.8;
+}
+
+@media (max-width: 360px) {
+    body {
+        padding: 8px;
+    }
+
+    .app {
+        padding: 20px 14px;
+        border-radius: 20px;
+    }
+
+    .result-card {
+        padding: 22px 8px;
+    }
+
+    .wings {
+        gap: 8px;
+    }
+
+    .prediction {
+        min-width: 170px;
+        padding: 14px 16px;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -380,8 +442,14 @@ button:disabled {
 
     <header class="header">
         <div class="logo">⚡ S_GOD ⚡</div>
-        <div class="subtitle">PREMIUM ANIMATION SYSTEM</div>
-        <div class="badge">✦ NEON EDITION ✦</div>
+
+        <div class="subtitle">
+            PREMIUM ANIMATION SYSTEM
+        </div>
+
+        <div class="badge">
+            ✦ NEON EDITION ✦
+        </div>
     </header>
 
     <div class="status">
@@ -412,16 +480,23 @@ button:disabled {
     </section>
 
     <section class="popup" id="popup">
-        <div class="popup-title">✦ RESULT SHOWCASE ✦</div>
+
+        <div class="popup-title">
+            ✦ RESULT SHOWCASE ✦
+        </div>
+
         <div class="popup-value" id="popupValue">
             Waiting for animation
         </div>
+
         <div class="popup-detail" id="popupDetail">
             Number and colour visual demo
         </div>
+
     </section>
 
     <div class="controls">
+
         <button id="startBtn" type="button">
             ⚡ START ANIMATION
         </button>
@@ -429,6 +504,7 @@ button:disabled {
         <button class="secondary" id="resetBtn" type="button">
             ↻ RESET
         </button>
+
     </div>
 
     <footer class="footer">
@@ -452,22 +528,14 @@ const startBtn = document.getElementById("startBtn");
 const resetBtn = document.getElementById("resetBtn");
 
 let running = false;
-let timers = [];
-
-function clearTimers() {
-    timers.forEach(clearInterval);
-    timers.forEach(clearTimeout);
-    timers = [];
-}
+let intervalId = null;
 
 function setNumberStyle(number) {
-    numberEl.classList.remove("rolling", "pop");
-    predictionEl.classList.remove("red", "green", "violet");
-
-    /*
-      Illustrative colour mapping for the visual demo.
-      This is not a real prediction or betting signal.
-    */
+    predictionEl.classList.remove(
+        "red",
+        "green",
+        "violet"
+    );
 
     let colour;
 
@@ -491,90 +559,114 @@ function startAnimation() {
     if (running) return;
 
     running = true;
-    clearTimers();
 
     startBtn.disabled = true;
     resetBtn.disabled = true;
 
     statusEl.textContent = "ANIMATION RUNNING...";
     captionEl.textContent = "GENERATING VISUAL EFFECTS...";
+
     popupEl.classList.remove("show");
 
     predictionEl.textContent = "LOADING";
     popupValueEl.textContent = "Please wait...";
-    popupDetailEl.textContent = "Number animation in progress";
+    popupDetailEl.textContent =
+        "Number animation in progress";
 
+    numberEl.classList.remove("pop");
     numberEl.classList.add("rolling");
 
     let ticks = 0;
     const maxTicks = 30;
 
-    const interval = setInterval(() => {
+    intervalId = setInterval(() => {
         const n = Math.floor(Math.random() * 10);
+
         numberEl.textContent = n;
         ticks++;
 
         if (ticks >= maxTicks) {
-            clearInterval(interval);
+            clearInterval(intervalId);
+            intervalId = null;
 
-            /*
-              The final display is generated once.
-              It stays unchanged until the next animation starts.
-            */
+            const finalNumber =
+                Math.floor(Math.random() * 10);
 
-            const finalNumber = Math.floor(Math.random() * 10);
             const result = setNumberStyle(finalNumber);
 
             numberEl.textContent = finalNumber;
+
             numberEl.classList.remove("rolling");
+            numberEl.classList.remove("pop");
+
+            /* Restart the final number animation. */
+            void numberEl.offsetWidth;
+
             numberEl.classList.add("pop");
 
             predictionEl.textContent = result.size;
+
             popupValueEl.textContent =
-                result.size + "  •  " + result.colour;
+                result.size + " • " + result.colour;
 
             popupDetailEl.textContent =
                 "Demo number: " + finalNumber +
                 " | Visual result only";
 
             captionEl.textContent =
-                "NUMBER " + finalNumber + " • DEMO RESULT";
+                "NUMBER " + finalNumber +
+                " • DEMO RESULT";
 
-            statusEl.textContent = "ANIMATION COMPLETE";
+            statusEl.textContent =
+                "ANIMATION COMPLETE";
 
             popupEl.classList.add("show");
 
             startBtn.disabled = false;
             resetBtn.disabled = false;
+
             startBtn.textContent = "↻ PLAY AGAIN";
 
             running = false;
         }
     }, 90);
-
-    timers.push(interval);
 }
 
 function resetAnimation() {
-    if (running) {
-        clearTimers();
-        running = false;
+    if (intervalId !== null) {
+        clearInterval(intervalId);
+        intervalId = null;
     }
 
+    running = false;
+
     numberEl.classList.remove("rolling", "pop");
-    predictionEl.classList.remove("red", "green", "violet");
+
+    predictionEl.classList.remove(
+        "red",
+        "green",
+        "violet"
+    );
 
     numberEl.textContent = "?";
     predictionEl.textContent = "READY";
-    statusEl.textContent = "SYSTEM READY";
-    captionEl.textContent = "PRESS START TO PLAY ANIMATION";
 
-    popupValueEl.textContent = "Waiting for animation";
-    popupDetailEl.textContent = "Number and colour visual demo";
+    statusEl.textContent = "SYSTEM READY";
+
+    captionEl.textContent =
+        "PRESS START TO PLAY ANIMATION";
+
+    popupValueEl.textContent =
+        "Waiting for animation";
+
+    popupDetailEl.textContent =
+        "Number and colour visual demo";
+
     popupEl.classList.remove("show");
 
     startBtn.disabled = false;
     resetBtn.disabled = false;
+
     startBtn.textContent = "⚡ START ANIMATION";
 }
 
