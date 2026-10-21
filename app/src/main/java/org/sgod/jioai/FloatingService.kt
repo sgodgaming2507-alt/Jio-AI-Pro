@@ -32,18 +32,19 @@ class FloatingService : Service() {
         try {
             windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
+            // Container layout with safe background to avoid crashes
             container = FrameLayout(this).apply {
-                setBackgroundColor(Color.TRANSPARENT)
+                setBackgroundColor(Color.parseColor("#030711"))
             }
 
             webView = WebView(this).apply {
-                setBackgroundColor(Color.TRANSPARENT)
+                // Transparent background hatakar safe solid color kiya hai taakin WebView crash na ho
+                setBackgroundColor(Color.parseColor("#030711"))
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
                 settings.mediaPlaybackRequiresUserGesture = false
                 addJavascriptInterface(WebAppInterface(), "Android")
                 
-                // WebView ko poore container ke barabar set kiya hai
                 layoutParams = FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT,
                     FrameLayout.LayoutParams.MATCH_PARENT
@@ -68,26 +69,24 @@ class FloatingService : Service() {
                 WindowManager.LayoutParams.TYPE_PHONE
             }
 
-            // WindowManager ki exact size aur margins jo tune maangi thin
+            // Safe WindowManager parameters
             params = WindowManager.LayoutParams(
-                414,  // Width
-                587,  // Height
+                414,
+                587,
                 layoutFlag,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT
             ).apply {
                 gravity = Gravity.TOP or Gravity.START
-                x = 76  // Left Margin
-                y = 98  // Top Margin
+                x = 76
+                y = 98
             }
 
-            // Dragging ke liye touch variables
             var initialX = 0
             var initialY = 0
             var initialTouchX = 0f
             var initialTouchY = 0f
 
-            // Touch listener jo window ko move karne dega bina buttons ko roke
             container.setOnTouchListener { _, event ->
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
@@ -95,7 +94,7 @@ class FloatingService : Service() {
                         initialY = params.y
                         initialTouchX = event.rawX
                         initialTouchY = event.rawY
-                        false // false rakhne se WebView ke andar click/scroll pass ho jayega
+                        false
                     }
                     MotionEvent.ACTION_MOVE -> {
                         params.x = initialX + (event.rawX - initialTouchX).toInt()
