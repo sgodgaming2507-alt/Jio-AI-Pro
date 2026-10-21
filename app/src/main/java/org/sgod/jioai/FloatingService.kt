@@ -32,7 +32,9 @@ class FloatingService : Service() {
         try {
             windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
-            container = FrameLayout(this)
+            container = FrameLayout(this).apply {
+                setBackgroundColor(Color.TRANSPARENT)
+            }
 
             webView = WebView(this).apply {
                 setBackgroundColor(Color.TRANSPARENT)
@@ -40,7 +42,12 @@ class FloatingService : Service() {
                 settings.domStorageEnabled = true
                 settings.mediaPlaybackRequiresUserGesture = false
                 addJavascriptInterface(WebAppInterface(), "Android")
-                layoutParams = FrameLayout.LayoutParams(414, 460) // Height 460 fix ki hai
+                
+                // WebView ko poore container ke barabar set kiya hai
+                layoutParams = FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
+                )
                 loadUrl("file:///android_asset/index.html")
             }
             container.addView(webView)
@@ -61,9 +68,10 @@ class FloatingService : Service() {
                 WindowManager.LayoutParams.TYPE_PHONE
             }
 
+            // WindowManager ki exact size aur margins jo tune maangi thin
             params = WindowManager.LayoutParams(
-                414,
-                460, // Height 460 fix ki hai
+                414,  // Width
+                587,  // Height
                 layoutFlag,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT
@@ -73,11 +81,13 @@ class FloatingService : Service() {
                 y = 98  // Top Margin
             }
 
+            // Dragging ke liye touch variables
             var initialX = 0
             var initialY = 0
             var initialTouchX = 0f
             var initialTouchY = 0f
 
+            // Touch listener jo window ko move karne dega bina buttons ko roke
             container.setOnTouchListener { _, event ->
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
@@ -85,7 +95,7 @@ class FloatingService : Service() {
                         initialY = params.y
                         initialTouchX = event.rawX
                         initialTouchY = event.rawY
-                        true
+                        false // false rakhne se WebView ke andar click/scroll pass ho jayega
                     }
                     MotionEvent.ACTION_MOVE -> {
                         params.x = initialX + (event.rawX - initialTouchX).toInt()
