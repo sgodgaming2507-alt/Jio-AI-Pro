@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>VIP S_GOD Predictor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIP S_God Predictor</title>
 
 <style>
 * {
@@ -20,58 +20,73 @@
 
 body {
     min-height: 100vh;
-    padding: 10px;
+    padding: 22px 12px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: transparent; /* Overlay ke liye transparent background */
+    background:
+        radial-gradient(ellipse at top, #102b40 0%, transparent 55%),
+        linear-gradient(160deg, #02040b, #07121d, #02040b);
     color: white;
     font-family: Arial, sans-serif;
-    overflow: hidden;
 }
 
 .app {
     position: relative;
     width: 100%;
-    max-width: 320px;
-    padding: 15px;
+    max-width: 390px;
+    padding: 20px;
     overflow: hidden;
-    border: 2px solid var(--green);
-    border-radius: 20px;
+    border: 1px solid #00ff8060;
+    border-radius: 22px;
     background: linear-gradient(160deg, #081727, #050a14 65%);
-    box-shadow: 0 0 25px rgba(0, 255, 128, 0.4);
+    box-shadow: 0 0 30px #00ff8020;
 }
 
-.close-btn {
+.app::before {
+    content: "";
     position: absolute;
-    right: 15px;
-    top: 12px;
-    color: var(--green);
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 10;
+    top: -90px;
+    left: 50%;
+    width: 250px;
+    height: 180px;
+    transform: translateX(-50%);
+    background: #00ff8018;
+    filter: blur(45px);
+    pointer-events: none;
 }
 
 .header {
     position: relative;
     text-align: center;
-    padding: 5px 0 10px;
+    padding: 8px 0 20px;
 }
 
 .logo {
-    font-size: 20px;
+    font-size: 27px;
     font-weight: 900;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     color: var(--green);
-    text-shadow: 0 0 10px #00ff80;
+    text-shadow: 0 0 10px #00ff80, 0 0 25px #00ff8060;
 }
 
 .subtitle {
-    margin-top: 4px;
-    font-size: 9px;
-    letter-spacing: 2px;
+    margin-top: 7px;
+    font-size: 10px;
+    letter-spacing: 3px;
     color: #9cb8c7;
+}
+
+.badge {
+    display: inline-block;
+    margin-top: 13px;
+    padding: 6px 12px;
+    border: 1px solid #00ff8060;
+    border-radius: 20px;
+    color: var(--green);
+    background: #00ff800c;
+    font-size: 10px;
+    letter-spacing: 1px;
 }
 
 .status {
@@ -79,74 +94,162 @@ body {
     justify-content: center;
     align-items: center;
     gap: 8px;
-    padding: 8px;
-    margin-bottom: 10px;
+    padding: 12px;
+    margin-bottom: 17px;
     border: 1px solid #1a3c48;
-    border-radius: 8px;
+    border-radius: 10px;
     background: #06121c;
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 1px;
     color: #b3cad6;
 }
 
 .dot {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: var(--green);
-    box-shadow: 0 0 8px var(--green);
+    box-shadow: 0 0 10px var(--green);
 }
 
 .result-card {
     position: relative;
-    padding: 15px 10px;
+    padding: 22px 12px;
     text-align: center;
     border: 1px solid #00ff8055;
-    border-radius: 14px;
-    background: #06111a;
+    border-radius: 17px;
+    background:
+        radial-gradient(ellipse at center, #06472b50, transparent 70%),
+        #06111a;
+    overflow: hidden;
+}
+
+.result-card::before,
+.result-card::after {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 2px;
+    top: 20px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    box-shadow: 0 0 12px var(--green);
+}
+
+.result-card::before {
+    left: -20px;
+    transform: rotate(35deg);
+}
+
+.result-card::after {
+    right: -20px;
+    transform: rotate(-35deg);
+}
+
+.wings {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.wing {
+    width: 72px;
+    height: 28px;
+    border-top: 2px solid var(--green);
+    border-bottom: 1px solid #00ff8070;
+    background: linear-gradient(180deg, #00ff8025, transparent);
+    filter: drop-shadow(0 0 7px #00ff80);
+    animation: wingPulse 1.5s infinite alternate;
+}
+
+.wing.left {
+    clip-path: polygon(0 0, 100% 25%, 75% 50%, 100% 75%, 0 100%, 25% 50%);
+}
+
+.wing.right {
+    clip-path: polygon(0 25%, 100% 0, 75% 50%, 100% 100%, 0 75%, 25% 50%);
+}
+
+@keyframes wingPulse {
+    from {
+        opacity: .45;
+        transform: scaleX(.8);
+    }
+    to {
+        opacity: 1;
+        transform: scaleX(1);
+    }
 }
 
 .label {
-    font-size: 9px;
-    letter-spacing: 2px;
+    font-size: 10px;
+    letter-spacing: 3px;
     color: #a5d9bf;
 }
 
 .number {
-    margin: 8px 0;
-    font-size: 60px;
-    line-height: 1;
+    margin: 12px 0;
+    font-size: 82px;
+    line-height: 1.05;
     font-weight: 900;
     color: var(--green);
-    text-shadow: 0 0 10px #00ff80;
+    text-shadow: 0 0 8px #00ff80, 0 0 28px #00ff8060;
 }
 
 .number.rolling {
     animation: numberGlow .12s infinite alternate;
 }
 
+.number.pop {
+    animation: pop .6s ease-out;
+}
+
 @keyframes numberGlow {
-    from { opacity: .65; transform: scale(.96); }
-    to { opacity: 1; transform: scale(1.04); }
+    from {
+        opacity: .65;
+        transform: scale(.96);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1.04);
+    }
+}
+
+@keyframes pop {
+    0% {
+        opacity: 0;
+        transform: scale(.2) rotate(-10deg);
+    }
+    65% {
+        opacity: 1;
+        transform: scale(1.2) rotate(3deg);
+    }
+    100% {
+        transform: scale(1) rotate(0);
+    }
 }
 
 .prediction {
     display: inline-block;
-    min-width: 130px;
-    padding: 8px 15px;
+    min-width: 155px;
+    padding: 12px 20px;
     border: 1px solid var(--green);
-    border-radius: 8px;
+    border-radius: 10px;
     color: var(--green);
     background: #00ff8012;
-    font-size: 18px;
+    box-shadow: 0 0 20px #00ff8015;
+    font-size: 22px;
     font-weight: 900;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    transition: .3s;
 }
 
 .prediction.red {
     color: #ff496a;
     border-color: #ff496a;
     background: #ff174412;
+    box-shadow: 0 0 20px #ff174420;
 }
 
 .prediction.green {
@@ -155,43 +258,118 @@ body {
     background: #00ff8012;
 }
 
+.prediction.violet {
+    color: #c68aff;
+    border-color: #c68aff;
+    background: #9b42ff12;
+}
+
 .result-caption {
-    margin-top: 8px;
-    font-size: 9px;
+    margin-top: 13px;
+    font-size: 10px;
     color: #8ea5b7;
+    letter-spacing: 1px;
 }
 
 .popup {
-    margin-top: 10px;
-    padding: 8px;
+    position: relative;
+    margin-top: 18px;
+    padding: 15px;
     border: 1px solid #00eaff60;
-    border-radius: 8px;
-    background: #071827;
+    border-radius: 12px;
+    background: linear-gradient(120deg, #06333b, #071827);
     text-align: center;
-    font-size: 10px;
+    opacity: .6;
+    transform: scale(.97);
+    transition: .3s;
+}
+
+.popup.show {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 22px #00eaff20;
+    animation: popupIn .5s ease;
+}
+
+@keyframes popupIn {
+    0% {
+        transform: translateY(12px) scale(.92);
+    }
+    100% {
+        transform: translateY(0) scale(1);
+    }
+}
+
+.popup-title {
     color: var(--cyan);
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.popup-value {
+    margin-top: 8px;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.popup-detail {
+    margin-top: 6px;
+    color: #91b6c5;
+    font-size: 11px;
 }
 
 .controls {
-    margin-top: 12px;
+    margin-top: 18px;
 }
 
 button {
     width: 100%;
-    min-height: 40px;
+    min-height: 49px;
     border: 0;
-    border-radius: 8px;
+    border-radius: 10px;
     background: linear-gradient(100deg, #00ff80, #00eaff);
     color: #03120e;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 900;
     letter-spacing: 1px;
     cursor: pointer;
-    box-shadow: 0 0 15px rgba(0,255,128,0.3);
+    box-shadow: 0 0 20px #00ff8020;
+    transition: .2s;
 }
 
 button:active {
     transform: scale(.98);
+}
+
+button:disabled {
+    opacity: .55;
+    cursor: wait;
+}
+
+.secondary {
+    margin-top: 10px;
+    min-height: 40px;
+    color: #b7d2df;
+    border: 1px solid #29414e;
+    background: #0a1621;
+    box-shadow: none;
+    font-size: 11px;
+}
+
+.footer {
+    margin-top: 17px;
+    text-align: center;
+    color: #607b8b;
+    font-size: 9px;
+    line-height: 1.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
 }
 </style>
 </head>
@@ -199,11 +377,11 @@ button:active {
 <body>
 
 <main class="app">
-    <div class="close-btn" onclick="closeApp()">×</div>
 
     <header class="header">
         <div class="logo">⚡ S_GOD ⚡</div>
-        <div class="subtitle">VIP 1-MIN PREDICTOR</div>
+        <div class="subtitle">PREMIUM ANIMATION SYSTEM</div>
+        <div class="badge">✦ NEON EDITION ✦</div>
     </header>
 
     <div class="status">
@@ -212,102 +390,196 @@ button:active {
     </div>
 
     <section class="result-card">
-        <div class="label">PREDICTED NUMBER</div>
+
+        <div class="wings">
+            <div class="wing left"></div>
+            <div class="label">RESULT</div>
+            <div class="wing right"></div>
+        </div>
+
+        <div class="label">NUMBER DISPLAY</div>
+
         <div class="number" id="number">?</div>
-        <div class="prediction green" id="prediction">READY</div>
-        <div class="result-caption" id="caption">PRESS START HACK TO ANALYZE</div>
+
+        <div class="prediction" id="prediction">
+            READY
+        </div>
+
+        <div class="result-caption" id="caption">
+            PRESS START TO PLAY ANIMATION
+        </div>
+
     </section>
 
     <section class="popup" id="popup">
-        <div id="periodText">PERIOD: --</div>
+        <div class="popup-title">✦ RESULT SHOWCASE ✦</div>
+        <div class="popup-value" id="popupValue">
+            Waiting for animation
+        </div>
+        <div class="popup-detail" id="popupDetail">
+            Number and colour visual demo
+        </div>
     </section>
 
     <div class="controls">
-        <button id="startBtn" type="button" onclick="startHack()">
-            ⚡ START HACK ⚡
+        <button id="startBtn" type="button">
+            ⚡ START ANIMATION
+        </button>
+
+        <button class="secondary" id="resetBtn" type="button">
+            ↻ RESET
         </button>
     </div>
+
+    <footer class="footer">
+        S_GOD • NEON ANIMATION UI<br>
+        VISUAL DEMO ONLY — NOT A REAL PREDICTION
+    </footer>
+
 </main>
 
 <script>
 "use strict";
 
-let lastPeriod = "";
+const numberEl = document.getElementById("number");
+const predictionEl = document.getElementById("prediction");
+const statusEl = document.getElementById("status");
+const captionEl = document.getElementById("caption");
+const popupEl = document.getElementById("popup");
+const popupValueEl = document.getElementById("popupValue");
+const popupDetailEl = document.getElementById("popupDetail");
+const startBtn = document.getElementById("startBtn");
+const resetBtn = document.getElementById("resetBtn");
 
-function updatePeriod() {
-    let now = new Date();
-    let year = now.getFullYear();
-    let month = String(now.getMonth() + 1).padStart(2, '0');
-    let day = String(now.getDate()).padStart(2, '0');
-    
-    let totalMinutes = now.getHours() * 60 + now.getMinutes();
-    let periodIndex = totalMinutes + 1;
-    let paddedIndex = String(periodIndex).padStart(4, '0');
-    let periodCode = year + month + day + "1000" + paddedIndex;
+let running = false;
+let timers = [];
 
-    document.getElementById('periodText').innerText = "PERIOD: " + periodCode;
-    return periodCode;
+function clearTimers() {
+    timers.forEach(clearInterval);
+    timers.forEach(clearTimeout);
+    timers = [];
 }
 
-setInterval(updatePeriod, 1000);
-updatePeriod();
+function setNumberStyle(number) {
+    numberEl.classList.remove("rolling", "pop");
+    predictionEl.classList.remove("red", "green", "violet");
 
-function startHack() {
-    let currentFullPeriod = updatePeriod();
+    /*
+      Illustrative colour mapping for the visual demo.
+      This is not a real prediction or betting signal.
+    */
 
-    if (currentFullPeriod === lastPeriod) {
-        try { Android.showToast("Please wait for next period!"); } catch(e) {}
-        return;
+    let colour;
+
+    if ([1, 3, 7, 9].includes(number)) {
+        colour = "GREEN";
+        predictionEl.classList.add("green");
+    } else if ([2, 4, 6, 8].includes(number)) {
+        colour = "RED";
+        predictionEl.classList.add("red");
+    } else {
+        colour = "VIOLET";
+        predictionEl.classList.add("violet");
     }
 
-    let startBtn = document.getElementById("startBtn");
-    let numberEl = document.getElementById("number");
-    let predictionEl = document.getElementById("prediction");
-    let statusEl = document.getElementById("status");
-    let captionEl = document.getElementById("caption");
+    const size = number >= 5 ? "BIG" : "SMALL";
+
+    return { colour, size };
+}
+
+function startAnimation() {
+    if (running) return;
+
+    running = true;
+    clearTimers();
 
     startBtn.disabled = true;
-    statusEl.textContent = "ANALYZING 1-MIN...";
-    captionEl.textContent = "HACKING SERVER...";
+    resetBtn.disabled = true;
+
+    statusEl.textContent = "ANIMATION RUNNING...";
+    captionEl.textContent = "GENERATING VISUAL EFFECTS...";
+    popupEl.classList.remove("show");
+
+    predictionEl.textContent = "LOADING";
+    popupValueEl.textContent = "Please wait...";
+    popupDetailEl.textContent = "Number animation in progress";
+
     numberEl.classList.add("rolling");
 
     let ticks = 0;
-    const maxTicks = 15;
+    const maxTicks = 30;
 
     const interval = setInterval(() => {
-        numberEl.textContent = Math.floor(Math.random() * 10);
+        const n = Math.floor(Math.random() * 10);
+        numberEl.textContent = n;
         ticks++;
 
         if (ticks >= maxTicks) {
             clearInterval(interval);
-            
-            // Real 1-min calculation based on period last digit
-            let lastDigit = parseInt(currentFullPeriod.slice(-1));
-            let size = (lastDigit >= 5) ? "BIG" : "SMALL";
-            let colorClass = (lastDigit >= 5) ? "green" : "red";
 
-            numberEl.textContent = lastDigit;
+            /*
+              The final display is generated once.
+              It stays unchanged until the next animation starts.
+            */
+
+            const finalNumber = Math.floor(Math.random() * 10);
+            const result = setNumberStyle(finalNumber);
+
+            numberEl.textContent = finalNumber;
             numberEl.classList.remove("rolling");
+            numberEl.classList.add("pop");
 
-            predictionEl.className = "prediction " + colorClass;
-            predictionEl.textContent = size + " (" + lastDigit + ")";
+            predictionEl.textContent = result.size;
+            popupValueEl.textContent =
+                result.size + "  •  " + result.colour;
 
-            captionEl.textContent = "SUCCESS • HACK APPLIED";
-            statusEl.textContent = "READY FOR NEXT";
+            popupDetailEl.textContent =
+                "Demo number: " + finalNumber +
+                " | Visual result only";
+
+            captionEl.textContent =
+                "NUMBER " + finalNumber + " • DEMO RESULT";
+
+            statusEl.textContent = "ANIMATION COMPLETE";
+
+            popupEl.classList.add("show");
 
             startBtn.disabled = false;
-            lastPeriod = currentFullPeriod;
+            resetBtn.disabled = false;
+            startBtn.textContent = "↻ PLAY AGAIN";
+
+            running = false;
         }
-    }, 100);
+    }, 90);
+
+    timers.push(interval);
 }
 
-function closeApp() {
-    try {
-        Android.closeMenu();
-    } catch(e) {
-        window.close();
+function resetAnimation() {
+    if (running) {
+        clearTimers();
+        running = false;
     }
+
+    numberEl.classList.remove("rolling", "pop");
+    predictionEl.classList.remove("red", "green", "violet");
+
+    numberEl.textContent = "?";
+    predictionEl.textContent = "READY";
+    statusEl.textContent = "SYSTEM READY";
+    captionEl.textContent = "PRESS START TO PLAY ANIMATION";
+
+    popupValueEl.textContent = "Waiting for animation";
+    popupDetailEl.textContent = "Number and colour visual demo";
+    popupEl.classList.remove("show");
+
+    startBtn.disabled = false;
+    resetBtn.disabled = false;
+    startBtn.textContent = "⚡ START ANIMATION";
 }
+
+startBtn.addEventListener("click", startAnimation);
+resetBtn.addEventListener("click", resetAnimation);
 </script>
 
 </body>
