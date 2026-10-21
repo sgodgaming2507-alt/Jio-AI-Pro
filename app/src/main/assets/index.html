@@ -1,224 +1,313 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        * { box-sizing: border-box; }
-        body { 
-            background: transparent; 
-            margin: 0; 
-            padding: 0;
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            font-family: sans-serif; 
-            overflow: hidden; 
-        }
-        
-        .injector-card {
-            width: 240px; 
-            background: rgba(0, 0, 0, 0.95); 
-            border: 2px solid #39ff14; 
-            border-radius: 12px; 
-            padding: 10px; 
-            text-align: center;
-            box-shadow: 0 0 15px rgba(57, 255, 20, 0.5); 
-            color: white; 
-            position: relative;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VIP S_GOD Predictor</title>
 
-        .header { 
-            color: #39ff14; 
-            font-weight: bold; 
-            font-size: 13px; 
-            margin-bottom: 4px; 
-            letter-spacing: 0.5px; 
-        }
-        
-        .close-btn { 
-            position: absolute; 
-            right: 8px; 
-            top: 4px; 
-            color: #39ff14; 
-            font-size: 14px; 
-            cursor: pointer; 
-        }
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        /* Loader */
-        .loader-container { display: none; margin: 5px 0; }
-        .loader {
-            width: 24px; height: 24px; border: 2px solid #1a1a1a; border-top: 2px solid #39ff14;
-            border-radius: 50%; margin: 0 auto; animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .status-text { color: #39ff14; font-size: 8px; margin-top: 3px; font-weight: bold; }
+:root {
+    --green: #00ff80;
+    --cyan: #00eaff;
+    --bg: #030711;
+}
 
-        /* Result Display */
-        #result-circle { 
-            width: 50px; height: 50px; border-radius: 50%; margin: 6px auto; 
-            display: none; align-items: center; justify-content: center; 
-            font-size: 12px; font-weight: bold; border: 2px solid #39ff14;
-        }
+body {
+    min-height: 100vh;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent; /* Overlay ke liye transparent background */
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
 
-        /* Period Box */
-        .period-box {
-            background: #1a1a1a; border-radius: 6px; padding: 4px; font-size: 9px;
-            color: #39ff14; margin-top: 6px; border: 1px solid #333; font-weight: bold;
-        }
+.app {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    padding: 15px;
+    overflow: hidden;
+    border: 2px solid var(--green);
+    border-radius: 20px;
+    background: linear-gradient(160deg, #081727, #050a14 65%);
+    box-shadow: 0 0 25px rgba(0, 255, 128, 0.4);
+}
 
-        /* Button */
-        .btn-hack {
-            background: linear-gradient(to right, #ff0000, #990000); border: none;
-            color: white; padding: 6px; border-radius: 6px; font-weight: bold;
-            width: 100%; margin-top: 6px; font-size: 11px; cursor: pointer;
-        }
-    </style>
+.close-btn {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    color: var(--green);
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.header {
+    position: relative;
+    text-align: center;
+    padding: 5px 0 10px;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: var(--green);
+    text-shadow: 0 0 10px #00ff80;
+}
+
+.subtitle {
+    margin-top: 4px;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #9cb8c7;
+}
+
+.status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #1a3c48;
+    border-radius: 8px;
+    background: #06121c;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #b3cad6;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+}
+
+.result-card {
+    position: relative;
+    padding: 15px 10px;
+    text-align: center;
+    border: 1px solid #00ff8055;
+    border-radius: 14px;
+    background: #06111a;
+}
+
+.label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #a5d9bf;
+}
+
+.number {
+    margin: 8px 0;
+    font-size: 60px;
+    line-height: 1;
+    font-weight: 900;
+    color: var(--green);
+    text-shadow: 0 0 10px #00ff80;
+}
+
+.number.rolling {
+    animation: numberGlow .12s infinite alternate;
+}
+
+@keyframes numberGlow {
+    from { opacity: .65; transform: scale(.96); }
+    to { opacity: 1; transform: scale(1.04); }
+}
+
+.prediction {
+    display: inline-block;
+    min-width: 130px;
+    padding: 8px 15px;
+    border: 1px solid var(--green);
+    border-radius: 8px;
+    color: var(--green);
+    background: #00ff8012;
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.prediction.red {
+    color: #ff496a;
+    border-color: #ff496a;
+    background: #ff174412;
+}
+
+.prediction.green {
+    color: #00ff80;
+    border-color: #00ff80;
+    background: #00ff8012;
+}
+
+.result-caption {
+    margin-top: 8px;
+    font-size: 9px;
+    color: #8ea5b7;
+}
+
+.popup {
+    margin-top: 10px;
+    padding: 8px;
+    border: 1px solid #00eaff60;
+    border-radius: 8px;
+    background: #071827;
+    text-align: center;
+    font-size: 10px;
+    color: var(--cyan);
+}
+
+.controls {
+    margin-top: 12px;
+}
+
+button {
+    width: 100%;
+    min-height: 40px;
+    border: 0;
+    border-radius: 8px;
+    background: linear-gradient(100deg, #00ff80, #00eaff);
+    color: #03120e;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(0,255,128,0.3);
+}
+
+button:active {
+    transform: scale(.98);
+}
+</style>
 </head>
+
 <body>
 
-<div class="injector-card">
-    <div class="close-btn" onclick="Android.closeMenu()">×</div>
-    <div class="header">MANAV VIP HACK</div>
-    
-    <div id="loader-area" class="loader-container">
-        <div class="loader"></div>
-        <div class="status-text">AI ANALYZING...</div>
-    </div>
-    
-    <div id="result-circle"></div>
+<main class="app">
+    <div class="close-btn" onclick="closeApp()">×</div>
 
-    <button id="hack_btn" class="btn-hack" onclick="handleHack()">⚡ START HACK ⚡</button>
+    <header class="header">
+        <div class="logo">⚡ S_GOD ⚡</div>
+        <div class="subtitle">VIP 1-MIN PREDICTOR</div>
+    </header>
 
-    <div class="period-box" id="period_text">
-        PERIOD: --
+    <div class="status">
+        <span class="dot"></span>
+        <span id="status">SYSTEM READY</span>
     </div>
-</div>
+
+    <section class="result-card">
+        <div class="label">PREDICTED NUMBER</div>
+        <div class="number" id="number">?</div>
+        <div class="prediction green" id="prediction">READY</div>
+        <div class="result-caption" id="caption">PRESS START HACK TO ANALYZE</div>
+    </section>
+
+    <section class="popup" id="popup">
+        <div id="periodText">PERIOD: --</div>
+    </section>
+
+    <div class="controls">
+        <button id="startBtn" type="button" onclick="startHack()">
+            ⚡ START HACK ⚡
+        </button>
+    </div>
+</main>
 
 <script>
-    // --- Advanced Wingo Prediction Engine (JS Integrated) ---
-    class WingoPredictionEngine {
-        constructor(windowSize = 50) {
-            this.windowSize = windowSize;
-            this.history = [];
-            this.currentStreakColor = null;
-            this.currentStreakCount = 0;
-            this.weights = { meanReversion: 0.4, streakBreaker: 0.3, trendFollower: 0.3 };
-        }
+"use strict";
 
-        updateHistory(color, number) {
-            const entry = { color: color.toUpperCase(), number: number, timestamp: Date.now() };
-            this.history.push(entry);
-            if (this.history.length > this.windowSize) { this.history.shift(); }
+let lastPeriod = "";
 
-            if (this.currentStreakColor === entry.color) {
-                this.currentStreakCount++;
-            } else {
-                this.currentStreakColor = entry.color;
-                this.currentStreakCount = 1;
-            }
-        }
+function updatePeriod() {
+    let now = new Date();
+    let year = now.getFullYear();
+    let month = String(now.getMonth() + 1).padStart(2, '0');
+    let day = String(now.getDate()).padStart(2, '0');
+    
+    let totalMinutes = now.getHours() * 60 + now.getMinutes();
+    let periodIndex = totalMinutes + 1;
+    let paddedIndex = String(periodIndex).padStart(4, '0');
+    let periodCode = year + month + day + "1000" + paddedIndex;
 
-        calculateProbabilities() {
-            if (this.history.length === 0) return { RED: 0.33, GREEN: 0.33, VIOLET: 0.34 };
-            const counts = { RED: 0, GREEN: 0, VIOLET: 0 };
-            this.history.forEach(item => { if (counts.hasOwnProperty(item.color)) counts[item.color]++; });
-            const total = this.history.length;
-            return { RED: counts.RED / total, GREEN: counts.GREEN / total, VIOLET: counts.VIOLET / total };
-        }
+    document.getElementById('periodText').innerText = "PERIOD: " + periodCode;
+    return periodCode;
+}
 
-        predict() {
-            // Agar history kam hai toh period ke last digit base fallback use karega
-            if (this.history.length < 3) return null;
+setInterval(updatePeriod, 1000);
+updatePeriod();
 
-            const probs = this.calculateProbabilities();
-            let scores = { RED: 0, GREEN: 0, VIOLET: 0 };
+function startHack() {
+    let currentFullPeriod = updatePeriod();
 
-            for (const [color, prob] of Object.entries(probs)) {
-                if (prob < 0.30) scores[color] += this.weights.meanReversion * (0.30 - prob) * 10;
-            }
-
-            if (this.currentStreakCount >= 3) {
-                const bw = this.weights.streakBreaker;
-                if (this.currentStreakColor === 'RED') { scores.GREEN += bw; scores.VIOLET += bw; }
-                else if (this.currentStreakColor === 'GREEN') { scores.RED += bw; scores.VIOLET += bw; }
-                else { scores.RED += bw * 0.5; scores.GREEN += bw * 0.5; }
-            }
-
-            if (this.currentStreakCount < 3 && this.currentStreakColor) {
-                scores[this.currentStreakColor] += this.weights.trendFollower * 0.5;
-            }
-
-            const maxScore = Math.max(...Object.values(scores));
-            if (maxScore === 0) return null;
-            return Object.keys(scores).find(key => scores[key] === maxScore);
-        }
+    if (currentFullPeriod === lastPeriod) {
+        try { Android.showToast("Please wait for next period!"); } catch(e) {}
+        return;
     }
 
-    const aiEngine = new WingoPredictionEngine(50);
-    let lastPeriod = "";
+    let startBtn = document.getElementById("startBtn");
+    let numberEl = document.getElementById("number");
+    let predictionEl = document.getElementById("prediction");
+    let statusEl = document.getElementById("status");
+    let captionEl = document.getElementById("caption");
 
-    function updatePeriod() {
-        let now = new Date();
-        let year = now.getFullYear();
-        let month = String(now.getMonth() + 1).padStart(2, '0');
-        let day = String(now.getDate()).padStart(2, '0');
-        
-        let totalMinutes = now.getHours() * 60 + now.getMinutes();
-        let periodIndex = totalMinutes + 1;
-        let paddedIndex = String(periodIndex).padStart(4, '0');
-        let periodCode = year + month + day + "1000" + paddedIndex;
+    startBtn.disabled = true;
+    statusEl.textContent = "ANALYZING 1-MIN...";
+    captionEl.textContent = "HACKING SERVER...";
+    numberEl.classList.add("rolling");
 
-        document.getElementById('period_text').innerText = "PERIOD: " + periodCode;
-        return periodCode;
-    }
+    let ticks = 0;
+    const maxTicks = 15;
 
-    setInterval(updatePeriod, 1000);
-    updatePeriod();
+    const interval = setInterval(() => {
+        numberEl.textContent = Math.floor(Math.random() * 10);
+        ticks++;
 
-    function handleHack() {
-        let currentFullPeriod = updatePeriod();
+        if (ticks >= maxTicks) {
+            clearInterval(interval);
+            
+            // Real 1-min calculation based on period last digit
+            let lastDigit = parseInt(currentFullPeriod.slice(-1));
+            let size = (lastDigit >= 5) ? "BIG" : "SMALL";
+            let colorClass = (lastDigit >= 5) ? "green" : "red";
 
-        if (currentFullPeriod === lastPeriod) {
-            try { Android.showToast("Please wait for next period!"); } catch(e) {}
-            return;
+            numberEl.textContent = lastDigit;
+            numberEl.classList.remove("rolling");
+
+            predictionEl.className = "prediction " + colorClass;
+            predictionEl.textContent = size + " (" + lastDigit + ")";
+
+            captionEl.textContent = "SUCCESS • HACK APPLIED";
+            statusEl.textContent = "READY FOR NEXT";
+
+            startBtn.disabled = false;
+            lastPeriod = currentFullPeriod;
         }
+    }, 100);
+}
 
-        document.getElementById('hack_btn').style.display = 'none';
-        document.getElementById('result-circle').style.display = 'none';
-        document.getElementById('loader-area').style.display = 'block';
-
-        let resCircle = document.getElementById('result-circle');
-        resCircle.style.display = 'flex';
-
-        let counter = 0;
-        let scrollInterval = setInterval(function() {
-            resCircle.innerHTML = Math.floor(Math.random() * 10);
-            counter++;
-            if (counter > 8) {
-                clearInterval(scrollInterval);
-                document.getElementById('loader-area').style.display = 'none';
-                
-                // Period last digit se number aur color determine karna
-                let lastDigit = parseInt(currentFullPeriod.slice(-1));
-                let baseColor = (lastDigit >= 5) ? "BIG" : "SMALL";
-                
-                // AI Engine update & prediction
-                aiEngine.updateHistory(lastDigit >= 5 ? 'RED' : 'GREEN', lastDigit);
-                let aiPrediction = aiEngine.predict();
-
-                let color = (baseColor === "BIG") ? "#39ff14" : "#ff0000";
-                
-                resCircle.innerHTML = baseColor + "<br><span style='font-size:8px;'>(" + lastDigit + ")</span>";
-                resCircle.style.borderColor = color;
-                resCircle.style.color = color;
-                resCircle.style.boxShadow = "0 0 10px " + color;
-
-                document.getElementById('hack_btn').style.display = 'block';
-                lastPeriod = currentFullPeriod;
-            }
-        }, 100);
+function closeApp() {
+    try {
+        Android.closeMenu();
+    } catch(e) {
+        window.close();
     }
+}
 </script>
 
 </body>
