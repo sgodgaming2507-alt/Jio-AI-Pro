@@ -34,13 +34,14 @@ class FloatingService : Service() {
 
             container = FrameLayout(this)
 
+            // Yahan WebView ka size 414x587 kar diya hai jo tune manga tha
             webView = WebView(this).apply {
                 setBackgroundColor(Color.TRANSPARENT)
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
                 settings.mediaPlaybackRequiresUserGesture = false
                 addJavascriptInterface(WebAppInterface(), "Android")
-                layoutParams = FrameLayout.LayoutParams(270, 270)
+                layoutParams = FrameLayout.LayoutParams(414, 587)
                 loadUrl("file:///android_asset/index.html")
             }
             container.addView(webView)
@@ -61,16 +62,17 @@ class FloatingService : Service() {
                 WindowManager.LayoutParams.TYPE_PHONE
             }
 
+            // Yahan WindowManager ki width aur height bhi 414 aur 587 set kar di hai, aur X=76, Y=98
             params = WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
+                414,
+                587,
                 layoutFlag,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT
             ).apply {
                 gravity = Gravity.TOP or Gravity.START
-                x = 100
-                y = 200
+                x = 76  // Left Margin
+                y = 98  // Top Margin
             }
 
             var initialX = 0
