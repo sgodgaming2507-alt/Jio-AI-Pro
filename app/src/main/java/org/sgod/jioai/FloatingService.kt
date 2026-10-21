@@ -40,7 +40,7 @@ class FloatingService : Service() {
                 settings.domStorageEnabled = true
                 settings.mediaPlaybackRequiresUserGesture = false
                 addJavascriptInterface(WebAppInterface(), "Android")
-                layoutParams = FrameLayout.LayoutParams(414, 520)
+                layoutParams = FrameLayout.LayoutParams(414, 460) // Height 460 fix ki hai
                 loadUrl("file:///android_asset/index.html")
             }
             container.addView(webView)
@@ -63,7 +63,7 @@ class FloatingService : Service() {
 
             params = WindowManager.LayoutParams(
                 414,
-                520,
+                460, // Height 460 fix ki hai
                 layoutFlag,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT
