@@ -1,61 +1,38 @@
 package org.sgod.jioai
 
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.provider.Settings
-import android.widget.Toast
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var webView: WebView
+
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        // Check for Overlay Permission (SYSTEM_ALERT_WINDOW)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(this)) {
-                val intent = Intent(
-                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:$packageName")
-                )
-                startActivityForResult(intent, 1234)
-                Toast.makeText(this, "Please allow permission to display over other apps", Toast.LENGTH_LONG).show()
-                return
-            }
+
+        // XML file ki zaroorat hi nahi hai, direct poori screen par WebView bana diya hai
+        webView = WebView(this).apply {
+            setBackgroundColor(0x00000000)
+            settings.javaScriptEnabled = true
+            settings.domStorageEnabled = true
+            settings.mediaPlaybackRequiresUserGesture = false
+            
+            webViewClient = WebViewClient()
+            loadUrl("file:///android_asset/index.html")
         }
 
-        startFloatingService()
+        setContentView(webView)
     }
 
-    private fun startFloatingService() {
-        try {
-            val intent = Intent(this, FloatingService::class.java)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(intent)
-            } else {
-                startService(intent)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        
-        // Minimize/Close main activity to show the floating panel smoothly over other apps
-        finish()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1234) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (Settings.canDrawOverlays(this)) {
-                    startFloatingService()
-                } else {
-                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-            }
+    override fun onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            super.onBackPressed()
         }
     }
 }
