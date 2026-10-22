@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 
+  Viewport Meta Tag:
+  user-scalable=no prevents accidental zooming on double-tap
+  initial-scale=1.0 ensures 1:1 pixel mapping
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#030711">
 
 <title>VIP S_God Predictor</title>
@@ -20,48 +25,73 @@
     --bg: #030711;
 }
 
-body {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: transparent;
-    color: white;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
-}
-
-.app {
-    position: relative;
-    isolation: isolate;
+/* 
+  HTML & Body: 
+  Remove default margins. 
+  Use fixed dimensions matching your Kotlin LayoutParams (380x420).
+  This prevents any "jitter" or resize issues in WebView.
+*/
+html, body {
     width: 380px;
     height: 420px;
+    margin: 0;
+    padding: 0;
+    background: var(--bg); /* Fallback background */
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow: hidden; /* Prevent body scroll */
+    touch-action: manipulation; /* Prevent double-tap zoom delay */
+}
+
+/* 
+  App Container:
+  Takes full space. 
+  No border-radius on the main container because the Native View 
+  (FrameLayout) is rectangular. 
+  If you want rounded corners, you must make the Native View 
+  transparent and use a CardView in XML, OR keep this square.
+  
+  For now, we keep it square to match the 380x420 window perfectly.
+*/
+.app {
+    position: relative;
+    width: 100%;
+    height: 100%;
     padding: 12px 14px;
+    /* 
+      Scroll Logic:
+      Only scroll if content overflows.
+      -webkit-overflow-scrolling: touch enables momentum scrolling on older Androids.
+    */
     overflow-y: auto;
     overflow-x: hidden;
-    border: 2px solid #00ff8070;
-    border-radius: 22px;
+    -webkit-overflow-scrolling: touch;
     background: linear-gradient(160deg, #081727, #050a14 65%);
-    box-shadow: 0 0 30px #00ff8030, inset 0 0 25px #00ff8008;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start; /* Top-aligned to ensure drag handle is always visible */
 }
 
+/* Hide Scrollbar but keep scroll functionality */
 .app::-webkit-scrollbar {
-    width: 4px;
-}
-.app::-webkit-scrollbar-thumb {
-    background: var(--green);
-    border-radius: 10px;
+    width: 0px;
+    background: transparent;
 }
 
+/* 
+  Header:
+  This area should align with the 48px Native Drag Handle.
+  If your Native Handle is 48px high, make this header at least 48px tall
+  or ensure the padding accounts for it.
+*/
 .header {
     text-align: center;
     padding: 2px 0 4px;
+    min-height: 48px; /* Matches Native Drag Handle Height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 0; /* Prevent header from shrinking on scroll */
 }
 
 .logo {
@@ -103,6 +133,7 @@ body {
     background: #06121c;
     font-size: 9px;
     color: #b3cad6;
+    flex-shrink: 0;
 }
 
 .dot {
@@ -121,6 +152,7 @@ body {
     border-radius: 12px;
     background: #06111a;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .wings {
@@ -202,6 +234,7 @@ body {
     background: #071827;
     text-align: center;
     opacity: .8;
+    flex-shrink: 0;
 }
 
 .popup.show { opacity: 1; }
@@ -210,7 +243,7 @@ body {
 .popup-value { margin-top: 2px; font-size: 14px; font-weight: 900; }
 .popup-detail { font-size: 9px; color: #91b6c5; }
 
-.controls { margin-top: 8px; }
+.controls { margin-top: 8px; flex-shrink: 0; }
 
 button {
     width: 100%;
@@ -223,6 +256,9 @@ button {
     font-size: 12px;
     font-weight: 900;
     cursor: pointer;
+    /* Prevent button text selection on long press */
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 button:active { transform: scale(.98); }
@@ -241,6 +277,7 @@ button:active { transform: scale(.98); }
     text-align: center;
     color: #718a99;
     font-size: 8px;
+    flex-shrink: 0;
 }
 </style>
 </head>
@@ -248,6 +285,10 @@ button:active { transform: scale(.98); }
 <body>
 
 <main class="app">
+    <!-- 
+      Note: The top 48px of this area is covered by the Native Drag Handle.
+      Ensure your content starts below that or the drag handle is semi-transparent.
+    -->
     <header class="header">
         <div class="logo">⚡ S_GOD ⚡</div>
         <div class="subtitle">PREMIUM ANIMATION SYSTEM</div>
