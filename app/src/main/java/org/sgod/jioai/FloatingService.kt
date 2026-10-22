@@ -25,6 +25,12 @@ import android.widget.TextView
 
 class FloatingService : Service() {
 
+    companion object {
+        private const val TAG = "S_GodFloating"
+        private const val PANEL_WIDTH = 380
+        private const val PANEL_HEIGHT = 420
+    }
+
     private lateinit var windowManager: WindowManager
     private lateinit var container: FrameLayout
     private lateinit var bubbleView: TextView
@@ -35,7 +41,6 @@ class FloatingService : Service() {
     private var isPanelVisible = true
     private var isServiceDestroyed = false
 
-    // Drag State
     private var initialX = 0
     private var initialY = 0
     private var initialTouchX = 0f
@@ -43,43 +48,33 @@ class FloatingService : Service() {
 
     private val mainHandler = Handler(Looper.getMainLooper())
 
-    // Dimensions (Must match HTML CSS)
-    private val PANEL_WIDTH = 380
-    private val PANEL_HEIGHT = 420
-    private val DRAG_HANDLE_HEIGHT = 48
-
     override fun onBind(intent: Intent?): IBinder? = null
 
     @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
     override fun onCreate() {
         super.onCreate()
+        Log.d(TAG, "Service Created")
         isServiceDestroyed = false
+
         try {
-            // Check Overlay Permission (Android 6.0+)
+            // 1. Overlay Permission Check
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
-                Log.w("FloatingService", "Overlay Permission Missing")
+                Log.e(TAG, "Overlay Permission Missing")
                 stopSelf()
                 return
             }
 
             windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
-            // 1. CONTAINER SETUP
+            // 2. Container
             container = FrameLayout(this).apply {
-                // Solid background to prevent see-through artifacts
                 setBackgroundColor(Color.parseColor("#030711"))
-                // Optional: Elevation for shadow (API 21+)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    elevation = 16f
-                }
+                elevation = 16f
             }
 
-            // 2. WEBVIEW SETUP
+            // 3. WebView
             webView = WebView(this).apply {
-                // Enable Hardware Acceleration for smooth rendering
-                setLayerType(View.LAYER_TYPE_HARDWARE, null)
                 setBackgroundColor(Color.parseColor("#030711"))
-                
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
                 settings.mediaPlaybackRequiresUserGesture = false
@@ -88,44 +83,38 @@ class FloatingService : Service() {
                 settings.loadWithOverviewMode = true
                 settings.useWideViewPort = true
 
-                // Critical: Prevent WebView from eating touch events meant for drag handle
-                // We handle this via the handle, but ensure WebView scrolls correctly inside
-                isHorizontalScrollBarEnabled = false
-                isVerticalScrollBarEnabled = true
-
+                // Safe JS Interface
                 addJavascriptInterface(WebAppInterface(), "Android")
-                
+
+                // Error Handling
                 webViewClient = object : WebViewClient() {
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        Log.d(TAG, "WebView Loaded: $url")
+                    }
                     override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
-                        Log.e("FloatingService", "WebView Error: ${error?.description}")
+                        Log.e(TAG, "WebView Error: ${error?.description}")
                     }
                 }
 
-                // LayoutParams for WebView: Fill the container
                 layoutParams = FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT,
                     FrameLayout.LayoutParams.MATCH_PARENT
                 )
-                loadUrl("file:///android_asset/index.html")
             }
             container.addView(webView)
 
-            // 3. DRAG HANDLE (Top Bar)
-            // This is the ONLY area that initiates drag
+            // 4. Drag Handle (Top 48px)
             val dragHandle = View(this).apply {
-                // Subtle color to indicate it's a handle
                 setBackgroundColor(Color.parseColor("#1a2938"))
-                // Height 48dp is comfortable for touch
                 layoutParams = FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT,
-                    DRAG_HANDLE_HEIGHT
+                    48
                 )
-                // Bring to front so it's above WebView
                 bringToFront()
             }
             container.addView(dragHandle)
 
-            // 4. BUBBLE VIEW
+            // 5. Bubble
             bubbleView = TextView(this).apply {
                 text = "⚡"
                 setTextColor(Color.WHITE)
@@ -133,21 +122,19 @@ class FloatingService : Service() {
                 gravity = Gravity.CENTER
                 setBackgroundColor(Color.parseColor("#cc000000"))
                 setPadding(18, 18, 18, 18)
-                // Rounded corners for bubble
                 val bg = android.graphics.drawable.GradientDrawable()
                 bg.cornerRadius = 30f
                 bg.setColor(Color.parseColor("#cc000000"))
                 background = bg
             }
 
-            // 5. PARAMS SETUP
+            // 6. Params
             val layoutFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
             } else {
                 WindowManager.LayoutParams.TYPE_PHONE
             }
 
-            // Panel Params: Fixed Size
             panelParams = WindowManager.LayoutParams(
                 PANEL_WIDTH,
                 PANEL_HEIGHT,
@@ -163,7 +150,6 @@ class FloatingService : Service() {
                 y = 98
             }
 
-            // Bubble Params: Wrap Content
             bubbleParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -178,9 +164,11 @@ class FloatingService : Service() {
                 y = 98
             }
 
-            // 6. TOUCH LOGIC (Drag Handle Only)
+            // 7. Drag Logic
             dragHandle.setOnTouchListener { _, event ->
-                if (isServiceDestroyed) return@setOnTouchListener false
+                if (isServiceDestroyed) {
+                    return@setOnTouchListener false
+                }
 
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
@@ -188,16 +176,14 @@ class FloatingService : Service() {
                         initialY = panelParams.y
                         initialTouchX = event.rawX
                         initialTouchY = event.rawY
-                        false // Allow click-through if no move
+                        false
                     }
                     MotionEvent.ACTION_MOVE -> {
                         val dx = (event.rawX - initialTouchX).toInt()
                         val dy = (event.rawY - initialTouchY).toInt()
-                        
                         val newX = initialX + dx
                         val newY = initialY + dy
 
-                        // Clamp to Screen
                         val metrics = resources.displayMetrics
                         val clampedX = newX.coerceIn(0, metrics.widthPixels - PANEL_WIDTH)
                         val clampedY = newY.coerceIn(0, metrics.heightPixels - PANEL_HEIGHT)
@@ -208,48 +194,59 @@ class FloatingService : Service() {
                         try {
                             windowManager.updateViewLayout(container, panelParams)
                         } catch (e: Exception) {
-                            Log.w("FloatingService", "Drag Update Failed", e)
+                            Log.w(TAG, "Drag Update Failed", e)
                         }
                         true
                     }
                     MotionEvent.ACTION_UP -> {
                         false
                     }
-                    else -> false
+                    else -> {
+                        false
+                    }
                 }
             }
 
-            // 7. BUBBLE CLICK (Expand)
+            // 8. Bubble Click
             bubbleView.setOnClickListener {
                 mainHandler.post {
-                    if (!isServiceDestroyed) expandPanel()
+                    if (!isServiceDestroyed) {
+                        expandPanel()
+                    }
                 }
             }
 
-            // 8. ADD VIEWS
+            // 9. Add Views
+            Log.d(TAG, "Adding Views to WindowManager")
             windowManager.addView(container, panelParams)
             isPanelVisible = true
 
+            // 10. Load HTML
+            Log.d(TAG, "Loading HTML")
+            webView.loadUrl("file:///android_asset/index.html")
+            Log.d(TAG, "Service Initialized Successfully")
+
         } catch (e: Exception) {
-            Log.e("FloatingService", "Service Creation Failed", e)
+            Log.e(TAG, "Service Initialization Failed", e)
             stopSelf()
         }
     }
 
     private fun expandPanel() {
-        if (isServiceDestroyed) return
+        if (isServiceDestroyed) {
+            return
+        }
         try {
             if (!isPanelVisible) {
-                // Sync position: Bubble goes where panel was
                 bubbleParams.x = panelParams.x
                 bubbleParams.y = panelParams.y
-                
                 windowManager.removeView(bubbleView)
                 windowManager.addView(container, panelParams)
                 isPanelVisible = true
+                Log.d(TAG, "Panel Expanded")
             }
         } catch (e: Exception) {
-            Log.e("FloatingService", "Expand Failed", e)
+            Log.e(TAG, "Expand Failed", e)
         }
     }
 
@@ -257,19 +254,21 @@ class FloatingService : Service() {
         @JavascriptInterface
         fun minimizePanel() {
             mainHandler.post {
-                if (isServiceDestroyed) return
-                try {
-                    if (isPanelVisible) {
-                        // Sync position: Bubble takes panel's spot
-                        bubbleParams.x = panelParams.x
-                        bubbleParams.y = panelParams.y
-                        
-                        windowManager.removeView(container)
-                        windowManager.addView(bubbleView, bubbleParams)
-                        isPanelVisible = false
+                if (isServiceDestroyed) {
+                    // Do nothing
+                } else {
+                    try {
+                        if (isPanelVisible) {
+                            bubbleParams.x = panelParams.x
+                            bubbleParams.y = panelParams.y
+                            windowManager.removeView(container)
+                            windowManager.addView(bubbleView, bubbleParams)
+                            isPanelVisible = false
+                            Log.d(TAG, "Panel Minimized")
+                        }
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Minimize Failed", e)
                     }
-                } catch (e: Exception) {
-                    Log.e("FloatingService", "Minimize Failed", e)
                 }
             }
         }
@@ -285,17 +284,18 @@ class FloatingService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         isServiceDestroyed = true
+        Log.d(TAG, "Service Destroying")
 
-        // Cleanup WebView
         try {
             if (::webView.isInitialized) {
                 webView.stopLoading()
                 webView.loadUrl("about:blank")
                 webView.destroy()
             }
-        } catch (e: Exception) {}
+        } catch (e: Exception) {
+            Log.e(TAG, "WebView Cleanup Failed", e)
+        }
 
-        // Remove Views
         try {
             if (::windowManager.isInitialized) {
                 if (::container.isInitialized) {
@@ -305,6 +305,8 @@ class FloatingService : Service() {
                     try { windowManager.removeView(bubbleView) } catch (_: Exception) {}
                 }
             }
-        } catch (e: Exception) {}
+        } catch (e: Exception) {
+            Log.e(TAG, "Window Cleanup Failed", e)
+        }
     }
 }
