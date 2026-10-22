@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
+import android.provider.Settings
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -30,15 +31,18 @@ class FloatingService : Service() {
     override fun onCreate() {
         super.onCreate()
         try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+                stopSelf()
+                return
+            }
+
             windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
-            // Container layout with safe background to avoid crashes
             container = FrameLayout(this).apply {
                 setBackgroundColor(Color.parseColor("#030711"))
             }
 
             webView = WebView(this).apply {
-                // Transparent background hatakar safe solid color kiya hai taakin WebView crash na ho
                 setBackgroundColor(Color.parseColor("#030711"))
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
@@ -69,12 +73,12 @@ class FloatingService : Service() {
                 WindowManager.LayoutParams.TYPE_PHONE
             }
 
-            // Safe WindowManager parameters
+            // Box type dimensions: Width 380px, Height 420px
             params = WindowManager.LayoutParams(
-                414,
-                587,
+                380,
+                420,
                 layoutFlag,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                 PixelFormat.TRANSLUCENT
             ).apply {
                 gravity = Gravity.TOP or Gravity.START
@@ -112,6 +116,7 @@ class FloatingService : Service() {
             windowManager.addView(bubbleView, params)
         } catch (e: Exception) {
             e.printStackTrace()
+            stopSelf()
         }
     }
 
