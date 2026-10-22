@@ -92,16 +92,20 @@ class FloatingService : Service() {
                 WindowManager.LayoutParams.TYPE_PHONE
             }
 
-            // Size ko wapas bada kar diya hai: Width 414px, Height 587px
+            // Screen ki width ke hisab se automatic size set hoga taaki kate nahi
+            val metrics = resources.displayMetrics
+            val calculatedWidth = (metrics.widthPixels * 0.88).toInt().coerceAtMost(450)
+            val calculatedHeight = 587
+
             panelParams = WindowManager.LayoutParams(
-                414,
-                587,
+                calculatedWidth,
+                calculatedHeight,
                 layoutFlag,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                 PixelFormat.TRANSLUCENT
             ).apply {
                 gravity = Gravity.TOP or Gravity.START
-                x = 76
+                x = 40
                 y = 98
             }
 
@@ -140,7 +144,6 @@ class FloatingService : Service() {
                         val newX = initialX + dx
                         val newY = initialY + dy
                         
-                        val metrics = resources.displayMetrics
                         val clampedX = newX.coerceIn(0, metrics.widthPixels - panelParams.width)
                         val clampedY = newY.coerceIn(0, metrics.heightPixels - panelParams.height)
                         
