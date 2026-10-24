@@ -1,114 +1,49 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <style>
-        body { background: transparent; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; overflow: hidden; }
-        
-        .injector-card {
-            width: 260px; background: rgba(0, 0, 0, 0.9); border: 2.5px solid #39ff14; 
-            border-radius: 25px; padding: 20px; text-align: center;
-            box-shadow: 0 0 25px rgba(57, 255, 20, 0.5); color: white; position: relative;
-        }
-
-        .header { color: #39ff14; font-weight: bold; font-size: 16px; margin-bottom: 10px; text-shadow: 0 0 10px #39ff14; letter-spacing: 1px; }
-        .close-btn { position: absolute; right: 15px; top: 15px; color: #39ff14; font-size: 18px; cursor: pointer; }
-
-        /* Loader */
-        .loader-container { display: none; margin: 20px 0; }
-        .loader {
-            width: 50px; height: 50px; border: 4px solid #1a1a1a; border-top: 4px solid #39ff14;
-            border-radius: 50%; margin: 0 auto; animation: spin 0.8s linear infinite;
-            box-shadow: 0 0 10px #39ff14;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .status-text { color: #39ff14; font-size: 11px; margin-top: 10px; font-weight: bold; letter-spacing: 1px; }
-
-        /* Result Display */
-        #result-circle { 
-            width: 80px; height: 80px; border-radius: 50%; margin: 15px auto; 
-            display: none; align-items: center; justify-content: center; 
-            font-size: 18px; font-weight: bold; border: 3px solid #39ff14;
-            text-shadow: 0 0 5px #fff; box-shadow: 0 0 15px rgba(255,255,255,0.2);
-        }
-
-        /* Period Box */
-        .period-box {
-            background: #1a1a1a; border-radius: 12px; padding: 8px; font-size: 13px;
-            color: #39ff14; margin-top: 15px; border: 1px solid #333; font-weight: bold;
-        }
-
-        /* Button */
-        .btn-hack {
-            background: linear-gradient(to right, #ff0000, #990000); border: none;
-            color: white; padding: 12px; border-radius: 12px; font-weight: bold;
-            width: 100%; margin-top: 15px; box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
-            font-size: 14px; cursor: pointer; transition: 0.3s;
-        }
-    </style>
-</head>
-<body>
-
-<div class="injector-card">
-    <div class="close-btn" onclick="Android.closeMenu()">×</div>
-    <div class="header">XS STORE PRO</div>
-    
-    <div id="loader-area" class="loader-container">
-        <div class="loader"></div>
-        <div class="status-text">QUANTUM ANALYZING...</div>
-    </div>
-    
-    <div id="result-circle"></div>
-
-    <button id="hack_btn" class="btn-hack" onclick="handleHack()">⚡ START HACK ⚡</button>
-
-    <div class="period-box" id="period_text">
-        PERIOD: 20260117XXXX----
-    </div>
-</div>
-
 <script>
-    let lastPeriod = "";
+    function updateGame() {
+        let now = new Date();
+        
+        // Date format: YYYYMMDD
+        let year = now.getFullYear();
+        let month = String(now.getMonth() + 1).padStart(2, '0');
+        let day = String(now.getDate()).padStart(2, '0');
+        let datePart = `${year}${month}${day}`;
+        
+        // Din ke total minutes nikal kar period number ka sequence banate hain
+        let totalMinutesToday = (now.getHours() * 60) + now.getMinutes();
+        let periodNumber = datePart + "1000" + (11000 + totalMinutesToday);
+        
+        document.getElementById('period_text').innerText = "PERIOD: " + periodNumber;
+        
+        // 1 minute ka unique seed banate hain taaki prediction 1 minute tak change na ho
+        let minuteSeed = Math.floor(now.getTime() / 60000);
+        let pseudoRandom = Math.sin(minuteSeed) * 10000;
+        let isBig = (pseudoRandom - Math.floor(pseudoRandom)) > 0.5;
+        
+        let prediction = isBig ? "BIG" : "SMALL";
+        let color = (prediction === "BIG") ? "#39ff14" : "#ff0000";
+        
+        let resCircle = document.getElementById('result-circle');
+        resCircle.innerHTML = prediction;
+        resCircle.style.display = 'flex';
+        resCircle.style.borderColor = color;
+        resCircle.style.color = color;
+        resCircle.style.boxShadow = "0 0 20px " + color;
+    }
 
     function handleHack() {
-        // Current date and dummy logic for last 4 digits
-        let now = new Date();
-        let dateStr = "20260117"; // Static as per your requirement
-        let randomLast4 = Math.floor(1000 + Math.random() * 9000); 
-        let currentFullPeriod = dateStr + "XXXX" + randomLast4;
-
-        // Check if same period clicked again
-        if (currentFullPeriod === lastPeriod) {
-            Android.showToast("Please wait for next period!");
-            return;
-        }
-
-        // UI Transition to Loading
         document.getElementById('hack_btn').style.display = 'none';
         document.getElementById('result-circle').style.display = 'none';
         document.getElementById('loader-area').style.display = 'block';
 
         setTimeout(() => {
             document.getElementById('loader-area').style.display = 'none';
-            
-            // Prediction Logic (Big/Small)
-            let prediction = Math.random() > 0.5 ? "BIG" : "SMALL";
-            let color = (prediction === "BIG") ? "#39ff14" : "#ff0000";
-            
-            let resCircle = document.getElementById('result-circle');
-            resCircle.innerHTML = prediction;
-            resCircle.style.display = 'flex';
-            resCircle.style.borderColor = color;
-            resCircle.style.color = color;
-            resCircle.style.boxShadow = "0 0 20px " + color;
-
-            document.getElementById('period_text').innerText = "PERIOD: " + currentFullPeriod;
+            updateGame();
             document.getElementById('hack_btn').style.display = 'block';
-            
-            lastPeriod = currentFullPeriod;
-        }, 2500); // 2.5 seconds processing
+        }, 1500);
     }
-</script>
 
-</body>
-</html>
+    // Page load hote hi current period aur prediction set ho jayegi
+    window.onload = function() {
+        updateGame();
+    };
+</script>
