@@ -1,916 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<title>VIP S_GOD | NEON PRO</title>
-
-<style>
-:root {
-  --bg: #03060d;
-  --panel: #09121c;
-  --cyan: #00f6ff;
-  --green: #00ff91;
-  --purple: #a855ff;
-  --text: #e9ffff;
-  --muted: #8195a7;
-}
-
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  color: var(--text);
-  background:
-    radial-gradient(ellipse at 50% 0%, #102c3d 0%, transparent 48%),
-    var(--bg);
-  font-family: Arial, Helvetica, sans-serif;
-  overflow-x: hidden;
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  opacity: .18;
-  pointer-events: none;
-  background-image:
-    linear-gradient(#00f6ff18 1px, transparent 1px),
-    linear-gradient(90deg, #00f6ff18 1px, transparent 1px);
-  background-size: 25px 25px;
-  mask-image: linear-gradient(to bottom, black, transparent 85%);
-}
-
-.app {
-  width: 100%;
-  max-width: 560px;
-  margin: auto;
-  padding: 17px 15px 32px;
-  animation: appEnter .7s ease both;
-}
-
-@keyframes appEnter {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.brand {
-  font-size: 21px;
-  font-weight: 900;
-  letter-spacing: 1px;
-  text-shadow: 0 0 14px #00f6ff70;
-}
-
-.brand span {
-  color: var(--cyan);
-}
-
-.badge {
-  border: 1px solid #00ff9150;
-  border-radius: 30px;
-  padding: 7px 10px;
-  color: var(--green);
-  background: #00ff9110;
-  font-size: 10px;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-
-.card {
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 15px;
-  padding: 19px;
-  border: 1px solid #00f6ff38;
-  border-radius: 20px;
-  background: linear-gradient(145deg, #0b1824f5, #060b13f5);
-  box-shadow:
-    0 0 25px #00f6ff0b,
-    inset 0 0 25px #00f6ff06;
-}
-
-.card::before {
-  content: "";
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  right: -65px;
-  top: -65px;
-  border-radius: 50%;
-  background: #00f6ff15;
-  filter: blur(20px);
-  pointer-events: none;
-}
-
-.section-label {
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: bold;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-.period-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.period {
-  overflow-wrap: anywhere;
-  color: var(--cyan);
-  font-size: clamp(15px, 4vw, 21px);
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-
-.copy-label {
-  flex-shrink: 0;
-  padding: 8px 11px;
-  border: 1px solid #00f6ff40;
-  border-radius: 8px;
-  background: #00f6ff0c;
-  color: var(--cyan);
-  font-size: 10px;
-  font-weight: bold;
-}
-
-.timer-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.timer-caption {
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.timer {
-  color: var(--green);
-  font-size: 29px;
-  font-weight: 900;
-  font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 15px #00ff9170;
-}
-
-.progress {
-  height: 5px;
-  margin-top: 12px;
-  overflow: hidden;
-  border-radius: 20px;
-  background: #152530;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--cyan), var(--green));
-  box-shadow: 0 0 12px var(--cyan);
-  transition: width .3s linear;
-}
-
-.result-card {
-  text-align: center;
-  padding: 23px 15px 21px;
-}
-
-.result-heading {
-  color: var(--muted);
-  font-size: 11px;
-  letter-spacing: 3px;
-  font-weight: bold;
-}
-
-.wing-stage {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 185px;
-  margin: 5px 0;
-}
-
-.wing {
-  position: absolute;
-  width: 85px;
-  height: 95px;
-  top: 44px;
-  opacity: .8;
-  filter: drop-shadow(0 0 7px var(--cyan));
-}
-
-.wing.left {
-  left: calc(50% - 139px);
-  transform: rotate(-18deg);
-}
-
-.wing.right {
-  right: calc(50% - 139px);
-  transform: scaleX(-1) rotate(-18deg);
-}
-
-.wing path {
-  fill: none;
-  stroke: var(--cyan);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.orb {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 145px;
-  height: 145px;
-  border-radius: 50%;
-  border: 1px solid #00f6ff80;
-  background:
-    radial-gradient(circle, #0c3442 0%, #071522 57%, #040910 75%);
-  box-shadow:
-    0 0 18px #00f6ff40,
-    inset 0 0 25px #00f6ff19;
-  animation: orbPulse 2.6s ease-in-out infinite;
-}
-
-.orb::before,
-.orb::after {
-  content: "";
-  position: absolute;
-  inset: -9px;
-  border: 1px solid #00f6ff65;
-  border-radius: 50%;
-  animation: orbit 8s linear infinite;
-}
-
-.orb::after {
-  inset: -17px;
-  border-color: #a855ff65;
-  animation-direction: reverse;
-  animation-duration: 12s;
-}
-
-@keyframes orbit {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes orbPulse {
-  0%, 100% {
-    box-shadow: 0 0 18px #00f6ff40, inset 0 0 25px #00f6ff19;
-  }
-  50% {
-    box-shadow: 0 0 36px #00f6ff80, inset 0 0 35px #00f6ff30;
-  }
-}
-
-.number {
-  position: relative;
-  z-index: 2;
-  color: white;
-  font-size: 76px;
-  line-height: 1;
-  font-weight: 900;
-  text-shadow: 0 0 12px var(--cyan), 0 0 35px var(--cyan);
-}
-
-.number.roll {
-  animation: numberPop .65s cubic-bezier(.2,.8,.2,1);
-}
-
-@keyframes numberPop {
-  0% { opacity: .2; transform: translateY(-18px) scale(.75); filter: blur(6px); }
-  65% { opacity: 1; transform: translateY(4px) scale(1.08); filter: blur(0); }
-  100% { transform: translateY(0) scale(1); }
-}
-
-.result-type {
-  display: inline-block;
-  min-width: 135px;
-  padding: 11px 22px;
-  border: 1px solid #00ff9160;
-  border-radius: 10px;
-  background: #00ff9110;
-  color: var(--green);
-  font-size: 24px;
-  font-weight: 900;
-  letter-spacing: 3px;
-  text-shadow: 0 0 15px #00ff9160;
-}
-
-.result-type.small {
-  color: var(--cyan);
-  border-color: #00f6ff60;
-  background: #00f6ff10;
-  text-shadow: 0 0 15px #00f6ff60;
-}
-
-.result-colour {
-  margin-top: 12px;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.disclaimer {
-  margin-top: 17px;
-  color: #718597;
-  font-size: 10px;
-  line-height: 1.6;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.stat {
-  padding: 14px 7px;
-  border: 1px solid #203543;
-  border-radius: 13px;
-  background: #07111b;
-  text-align: center;
-}
-
-.stat-value {
-  color: var(--cyan);
-  font-size: 23px;
-  font-weight: 900;
-}
-
-.stat-name {
-  margin-top: 6px;
-  color: var(--muted);
-  font-size: 10px;
-  letter-spacing: .5px;
-}
-
-.stat.green .stat-value { color: var(--green); }
-.stat.purple .stat-value { color: var(--purple); }
-
-.section-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.section-title {
-  font-size: 15px;
-  font-weight: 800;
-}
-
-.mini-badge {
-  color: var(--cyan);
-  font-size: 10px;
-  letter-spacing: 1px;
-}
-
-.history-list {
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
-
-.history-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 43px 72px;
-  align-items: center;
-  gap: 8px;
-  padding: 11px 10px;
-  border: 1px solid #1b2c39;
-  border-radius: 11px;
-  background: #060d15;
-  animation: historyEnter .35s ease both;
-}
-
-@keyframes historyEnter {
-  from { opacity: 0; transform: translateX(-8px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.history-period {
-  overflow-wrap: anywhere;
-  color: #a8bdcc;
-  font-size: 11px;
-}
-
-.history-number {
-  color: white;
-  text-align: center;
-  font-size: 21px;
-  font-weight: 900;
-  text-shadow: 0 0 10px #00f6ff65;
-}
-
-.history-type {
-  padding: 7px 4px;
-  border: 1px solid #00ff9140;
-  border-radius: 7px;
-  background: #00ff910b;
-  color: var(--green);
-  text-align: center;
-  font-size: 10px;
-  font-weight: bold;
-}
-
-.history-type.small {
-  color: var(--cyan);
-  border-color: #00f6ff40;
-  background: #00f6ff0b;
-}
-
-.empty {
-  padding: 20px 8px;
-  color: var(--muted);
-  text-align: center;
-  font-size: 12px;
-  line-height: 1.7;
-}
-
-.buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 14px;
-}
-
-.btn {
-  min-height: 45px;
-  border: 1px solid #00f6ff50;
-  border-radius: 10px;
-  background: #00f6ff0c;
-  color: var(--cyan);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .5px;
-}
-
-.btn:active {
-  transform: scale(.97);
-}
-
-.btn.danger {
-  color: #ff8097;
-  border-color: #ff526550;
-  background: #ff52650b;
-}
-
-.footer {
-  padding: 8px 0 0;
-  color: #4e6678;
-  text-align: center;
-  font-size: 10px;
-  letter-spacing: 1px;
-}
-
-.toast {
-  position: fixed;
-  z-index: 99;
-  left: 50%;
-  bottom: 25px;
-  max-width: 90%;
-  padding: 12px 17px;
-  border: 1px solid #00f6ff60;
-  border-radius: 10px;
-  background: #081722;
-  color: var(--cyan);
-  font-size: 12px;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, 12px);
-  transition: .25s ease;
-}
-
-.toast.show {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
-
-@media (max-width: 360px) {
-  .app { padding: 12px 10px 25px; }
-  .card { padding: 15px; }
-  .wing { width: 65px; }
-  .wing.left { left: calc(50% - 120px); }
-  .wing.right { right: calc(50% - 120px); }
-  .orb { width: 125px; height: 125px; }
-  .number { font-size: 66px; }
-  .brand { font-size: 18px; }
-}
-</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        body { background: transparent; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; overflow: hidden; }
+        
+        .injector-card {
+            width: 260px; background: rgba(0, 0, 0, 0.9); border: 2.5px solid #39ff14; 
+            border-radius: 25px; padding: 20px; text-align: center;
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.5); color: white; position: relative;
+        }
+
+        .header { color: #39ff14; font-weight: bold; font-size: 16px; margin-bottom: 10px; text-shadow: 0 0 10px #39ff14; letter-spacing: 1px; }
+        .close-btn { position: absolute; right: 15px; top: 15px; color: #39ff14; font-size: 18px; cursor: pointer; }
+
+        /* Loader */
+        .loader-container { display: none; margin: 20px 0; }
+        .loader {
+            width: 50px; height: 50px; border: 4px solid #1a1a1a; border-top: 4px solid #39ff14;
+            border-radius: 50%; margin: 0 auto; animation: spin 0.8s linear infinite;
+            box-shadow: 0 0 10px #39ff14;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .status-text { color: #39ff14; font-size: 11px; margin-top: 10px; font-weight: bold; letter-spacing: 1px; }
+
+        /* Result Display */
+        #result-circle { 
+            width: 80px; height: 80px; border-radius: 50%; margin: 15px auto; 
+            display: none; align-items: center; justify-content: center; 
+            font-size: 18px; font-weight: bold; border: 3px solid #39ff14;
+            text-shadow: 0 0 5px #fff; box-shadow: 0 0 15px rgba(255,255,255,0.2);
+        }
+
+        /* Period Box */
+        .period-box {
+            background: #1a1a1a; border-radius: 12px; padding: 8px; font-size: 13px;
+            color: #39ff14; margin-top: 15px; border: 1px solid #333; font-weight: bold;
+        }
+
+        /* Button */
+        .btn-hack {
+            background: linear-gradient(to right, #ff0000, #990000); border: none;
+            color: white; padding: 12px; border-radius: 12px; font-weight: bold;
+            width: 100%; margin-top: 15px; box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+            font-size: 14px; cursor: pointer; transition: 0.3s;
+        }
+    </style>
 </head>
-
 <body>
-<main class="app">
 
-  <header class="topbar">
-    <div class="brand">VIP <span>S_GOD</span></div>
-    <div class="badge">● NEON DEMO</div>
-  </header>
-
-  <section class="card">
-    <div class="section-label">Current Period</div>
-
-    <div class="period-row">
-      <div class="period" id="period">Loading...</div>
-      <button class="copy-label" id="copyPeriod">COPY ID</button>
+<div class="injector-card">
+    <div class="close-btn" onclick="Android.closeMenu()">×</div>
+    <div class="header">XS STORE PRO</div>
+    
+    <div id="loader-area" class="loader-container">
+        <div class="loader"></div>
+        <div class="status-text">QUANTUM ANALYZING...</div>
     </div>
+    
+    <div id="result-circle"></div>
 
-    <div class="timer-row">
-      <div>
-        <div class="section-label">Period Timer</div>
-        <div class="timer-caption">Next demo update</div>
-      </div>
-      <div class="timer" id="timer">00:60</div>
+    <button id="hack_btn" class="btn-hack" onclick="handleHack()">⚡ START HACK ⚡</button>
+
+    <div class="period-box" id="period_text">
+        PERIOD: 20260117XXXX----
     </div>
-
-    <div class="progress">
-      <div class="progress-bar" id="progressBar"></div>
-    </div>
-  </section>
-
-  <section class="card result-card">
-    <div class="result-heading">✦ &nbsp; DEMO RESULT &nbsp; ✦</div>
-
-    <div class="wing-stage">
-      <svg class="wing left" viewBox="0 0 100 110" aria-hidden="true">
-        <path d="M90 54 L58 45 L72 25 L45 38 L48 12 L29 37 L17 23 L22 49 L7 46 L24 62 L12 72 L38 72 L32 92 L53 75 L65 91 L65 68 Z"/>
-        <path d="M89 54 L30 59 L52 73 M48 38 L30 59 M58 45 L30 59"/>
-      </svg>
-
-      <div class="orb">
-        <div class="number" id="resultNumber">?</div>
-      </div>
-
-      <svg class="wing right" viewBox="0 0 100 110" aria-hidden="true">
-        <path d="M90 54 L58 45 L72 25 L45 38 L48 12 L29 37 L17 23 L22 49 L7 46 L24 62 L12 72 L38 72 L32 92 L53 75 L65 91 L65 68 Z"/>
-        <path d="M89 54 L30 59 L52 73 M48 38 L30 59 M58 45 L30 59"/>
-      </svg>
-    </div>
-
-    <div class="result-type" id="resultType">WAIT</div>
-    <div class="result-colour" id="resultColour">Demo colour: —</div>
-
-    <div class="disclaimer">
-      DEMO ONLY — This is a locally generated random demo result,
-      not a real prediction. Random outcomes cannot be guaranteed.
-    </div>
-  </section>
-
-  <section>
-    <div class="section-head">
-      <div class="section-title">📊 Demo Statistics</div>
-      <div class="mini-badge">SAVED LOCALLY</div>
-    </div>
-
-    <div class="stats-grid">
-      <div class="stat">
-        <div class="stat-value" id="totalCount">0</div>
-        <div class="stat-name">TOTAL RESULTS</div>
-      </div>
-      <div class="stat green">
-        <div class="stat-value" id="bigCount">0</div>
-        <div class="stat-name">BIG (5–9)</div>
-      </div>
-      <div class="stat purple">
-        <div class="stat-value" id="smallCount">0</div>
-        <div class="stat-name">SMALL (0–4)</div>
-      </div>
-    </div>
-  </section>
-
-  <section class="card" style="margin-top:15px">
-    <div class="section-head">
-      <div class="section-title">🧾 Result History</div>
-      <div class="mini-badge" id="historyCount">0 RECORDS</div>
-    </div>
-
-    <div class="history-list" id="historyList">
-      <div class="empty">Demo history will appear here.</div>
-    </div>
-
-    <div class="buttons">
-      <button class="btn" id="refreshBtn">↻ REFRESH VIEW</button>
-      <button class="btn danger" id="clearBtn">CLEAR HISTORY</button>
-    </div>
-  </section>
-
-  <footer class="footer">
-    VIP S_GOD · NEON INTERFACE · DEMO MODE
-  </footer>
-
-</main>
-
-<div class="toast" id="toast"></div>
+</div>
 
 <script>
-(() => {
-  "use strict";
+    let lastPeriod = "";
 
-  const PERIOD_MS = 60000;
-  const STORAGE_KEY = "sgod_neon_demo_v1";
-  const MAX_HISTORY = 200;
+    function handleHack() {
+        // Current date and dummy logic for last 4 digits
+        let now = new Date();
+        let dateStr = "20260117"; // Static as per your requirement
+        let randomLast4 = Math.floor(1000 + Math.random() * 9000); 
+        let currentFullPeriod = dateStr + "XXXX" + randomLast4;
 
-  const $ = id => document.getElementById(id);
+        // Check if same period clicked again
+        if (currentFullPeriod === lastPeriod) {
+            Android.showToast("Please wait for next period!");
+            return;
+        }
 
-  let state = {
-    currentKey: "",
-    currentResult: null,
-    history: []
-  };
+        // UI Transition to Loading
+        document.getElementById('hack_btn').style.display = 'none';
+        document.getElementById('result-circle').style.display = 'none';
+        document.getElementById('loader-area').style.display = 'block';
 
-  let toastTimeout;
+        setTimeout(() => {
+            document.getElementById('loader-area').style.display = 'none';
+            
+            // Prediction Logic (Big/Small)
+            let prediction = Math.random() > 0.5 ? "BIG" : "SMALL";
+            let color = (prediction === "BIG") ? "#39ff14" : "#ff0000";
+            
+            let resCircle = document.getElementById('result-circle');
+            resCircle.innerHTML = prediction;
+            resCircle.style.display = 'flex';
+            resCircle.style.borderColor = color;
+            resCircle.style.color = color;
+            resCircle.style.boxShadow = "0 0 20px " + color;
 
-  function readState() {
-    try {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-
-      if (saved && Array.isArray(saved.history)) {
-        state.history = saved.history.filter(item =>
-          item &&
-          typeof item.period === "string" &&
-          Number.isInteger(item.number) &&
-          item.number >= 0 &&
-          item.number <= 9
-        ).slice(0, MAX_HISTORY);
-
-        state.currentKey = typeof saved.currentKey === "string"
-          ? saved.currentKey : "";
-
-        state.currentResult =
-          saved.currentResult &&
-          Number.isInteger(saved.currentResult.number)
-            ? saved.currentResult : null;
-      }
-    } catch (error) {
-      state = { currentKey: "", currentResult: null, history: [] };
+            document.getElementById('period_text').innerText = "PERIOD: " + currentFullPeriod;
+            document.getElementById('hack_btn').style.display = 'block';
+            
+            lastPeriod = currentFullPeriod;
+        }, 2500); // 2.5 seconds processing
     }
-  }
-
-  function saveState() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch (error) {
-      showToast("Storage unavailable; history may not persist.");
-    }
-  }
-
-  function getPeriodInfo(now = Date.now()) {
-    const periodStart = Math.floor(now / PERIOD_MS) * PERIOD_MS;
-    const date = new Date(periodStart);
-
-    const pad = n => String(n).padStart(2, "0");
-
-    const period =
-      date.getFullYear() +
-      pad(date.getMonth() + 1) +
-      pad(date.getDate()) +
-      pad(date.getHours()) +
-      pad(date.getMinutes());
-
-    const remainingMs = PERIOD_MS - (now % PERIOD_MS);
-    const seconds = Math.ceil(remainingMs / 1000);
-
-    return { period, periodStart, remainingMs, seconds };
-  }
-
-  // A reproducible local demo number for each period.
-  // This is not based on external data and is not a prediction.
-  function demoNumber(period) {
-    let hash = 2166136261;
-
-    for (let i = 0; i < period.length; i++) {
-      hash ^= period.charCodeAt(i);
-      hash = Math.imul(hash, 16777619);
-    }
-
-    hash ^= hash >>> 16;
-    hash = Math.imul(hash, 2246822507);
-    hash ^= hash >>> 13;
-
-    return (hash >>> 0) % 10;
-  }
-
-  function makeResult(period) {
-    const number = demoNumber(period);
-
-    let colour = "VIOLET";
-    if (number % 3 === 1) colour = "GREEN";
-    if (number % 3 === 2) colour = "RED";
-
-    return {
-      period,
-      number,
-      type: number >= 5 ? "BIG" : "SMALL",
-      colour,
-      createdAt: Date.now()
-    };
-  }
-
-  function processCurrentPeriod(info) {
-    if (state.currentKey === info.period && state.currentResult) {
-      return;
-    }
-
-    // Save the previous period exactly once when moving to a new period.
-    if (state.currentResult && state.currentKey) {
-      const previousExists = state.history.some(
-        item => item.period === state.currentKey
-      );
-
-      if (!previousExists) {
-        state.history.unshift({
-          ...state.currentResult,
-          period: state.currentKey
-        });
-      }
-    }
-
-    state.currentKey = info.period;
-    state.currentResult = makeResult(info.period);
-
-    state.history = state.history.slice(0, MAX_HISTORY);
-
-    saveState();
-    renderResult(true);
-    renderHistory();
-    renderStats();
-  }
-
-  function renderResult(animate) {
-    const result = state.currentResult;
-    if (!result) return;
-
-    $("period").textContent = state.currentKey;
-    $("resultNumber").textContent = result.number;
-
-    const numberElement = $("resultNumber");
-
-    if (animate) {
-      numberElement.classList.remove("roll");
-      void numberElement.offsetWidth;
-      numberElement.classList.add("roll");
-    }
-
-    const typeElement = $("resultType");
-    typeElement.textContent = result.type;
-    typeElement.classList.toggle("small", result.type === "SMALL");
-
-    $("resultColour").textContent = "Demo colour: " + result.colour;
-  }
-
-  function renderStats() {
-    const all = [];
-
-    if (state.currentResult) all.push(state.currentResult);
-
-    for (const item of state.history) {
-      if (!all.some(existing => existing.period === item.period)) {
-        all.push(item);
-      }
-    }
-
-    $("totalCount").textContent = all.length;
-    $("bigCount").textContent =
-      all.filter(item => item.number >= 5).length;
-    $("smallCount").textContent =
-      all.filter(item => item.number < 5).length;
-  }
-
-  function renderHistory() {
-    const list = $("historyList");
-    list.replaceChildren();
-
-    const records = state.history.slice(0, 30);
-
-    $("historyCount").textContent = state.history.length + " RECORDS";
-
-    if (records.length === 0) {
-      const empty = document.createElement("div");
-      empty.className = "empty";
-      empty.textContent =
-        "No completed periods yet. History appears after the next period.";
-      list.appendChild(empty);
-      return;
-    }
-
-    records.forEach((item, index) => {
-      const row = document.createElement("div");
-      row.className = "history-item";
-      row.style.animationDelay = Math.min(index * 20, 250) + "ms";
-
-      const period = document.createElement("div");
-      period.className = "history-period";
-      period.textContent = item.period;
-
-      const number = document.createElement("div");
-      number.className = "history-number";
-      number.textContent = item.number;
-
-      const type = document.createElement("div");
-      type.className =
-        "history-type" + (item.number < 5 ? " small" : "");
-      type.textContent = item.number >= 5 ? "BIG" : "SMALL";
-
-      row.append(period, number, type);
-      list.appendChild(row);
-    });
-  }
-
-  function updateTimer() {
-    const now = Date.now();
-    const info = getPeriodInfo(now);
-
-    processCurrentPeriod(info);
-
-    const mm = Math.floor(info.seconds / 60);
-    const ss = info.seconds % 60;
-
-    $("timer").textContent =
-      String(mm).padStart(2, "0") + ":" +
-      String(ss).padStart(2, "0");
-
-    const progress = (info.remainingMs / PERIOD_MS) * 100;
-    $("progressBar").style.width = progress + "%";
-  }
-
-  function showToast(message) {
-    const toast = $("toast");
-    toast.textContent = message;
-    toast.classList.add("show");
-
-    clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(() => {
-      toast.classList.remove("show");
-    }, 1900);
-  }
-
-  $("copyPeriod").addEventListener("click", async () => {
-    const period = state.currentKey;
-    try {
-      await navigator.clipboard.writeText(period);
-      showToast("Period ID copied");
-    } catch (error) {
-      showToast("Period ID: " + period);
-    }
-  });
-
-  $("refreshBtn").addEventListener("click", () => {
-    updateTimer();
-    renderResult(false);
-    renderHistory();
-    renderStats();
-    showToast("View refreshed");
-  });
-
-  $("clearBtn").addEventListener("click", () => {
-    const confirmed = window.confirm(
-      "Clear all saved demo history? This cannot be undone."
-    );
-
-    if (!confirmed) return;
-
-    state.history = [];
-    saveState();
-    renderHistory();
-    renderStats();
-    showToast("History cleared");
-  });
-
-  readState();
-
-  // Reconcile the saved result with the current minute.
-  updateTimer();
-  renderResult(false);
-  renderHistory();
-  renderStats();
-
-  // Frequent timer checks do not generate new results unless the minute changes.
-  setInterval(updateTimer, 250);
-})();
 </script>
+
 </body>
 </html>
