@@ -1,49 +1,570 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIP S_GOD | NEON UI</title>
+
+<style>
+:root {
+  --green: #39ff14;
+  --cyan: #00f6ff;
+  --bg: #05080d;
+  --panel: #0b121b;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at top, #10251d 0%, transparent 50%),
+    linear-gradient(160deg, #030609, #071019 55%, #020405);
+  color: white;
+  font-family: Arial, sans-serif;
+  padding: 18px 14px 30px;
+}
+.app {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+}
+.header {
+  text-align: center;
+  padding: 18px 8px 22px;
+}
+.logo {
+  font-size: clamp(28px, 8vw, 42px);
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--green);
+  text-shadow: 0 0 9px #39ff14, 0 0 28px #39ff1466;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+.subtitle {
+  margin-top: 9px;
+  color: var(--cyan);
+  font-size: 11px;
+  letter-spacing: 4px;
+}
+.card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #101c25, #070b10);
+  border: 1px solid #39ff1460;
+  border-radius: 23px;
+  padding: 22px 17px;
+  margin-bottom: 16px;
+  box-shadow: 0 0 22px #39ff1412, inset 0 0 20px #00f6ff08;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  right: -100px;
+  top: -100px;
+  border-radius: 50%;
+  background: #00f6ff12;
+  filter: blur(15px);
+}
+.section-title {
+  color: var(--cyan);
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin-bottom: 17px;
+  font-weight: bold;
+}
+.status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.status {
+  color: var(--green);
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  margin-right: 6px;
+  box-shadow: 0 0 10px var(--green);
+  animation: blink 1s infinite;
+}
+.period {
+  margin-top: 20px;
+  padding: 15px 10px;
+  border-radius: 12px;
+  border: 1px solid #00f6ff45;
+  background: #00f6ff08;
+  text-align: center;
+}
+.label {
+  color: #8b9ba8;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+.period-value {
+  margin-top: 9px;
+  font-size: clamp(17px, 5vw, 23px);
+  font-weight: 800;
+  color: white;
+  letter-spacing: 1px;
+  overflow-wrap: anywhere;
+}
+.timer-area {
+  margin-top: 20px;
+}
+.timer-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  color: #9aaab6;
+  font-size: 12px;
+}
+.timer {
+  color: var(--green);
+  font-size: 25px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 12px #39ff1480;
+}
+.progress-track {
+  width: 100%;
+  height: 7px;
+  background: #1c2931;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.progress {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), var(--cyan));
+  box-shadow: 0 0 12px var(--green);
+  transition: width .2s linear;
+}
+.result-card {
+  text-align: center;
+  padding-top: 27px;
+  padding-bottom: 28px;
+}
+.result-frame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 180px;
+  height: 180px;
+  max-width: 65vw;
+  max-height: 65vw;
+  margin: 20px auto;
+  border-radius: 50%;
+  border: 2px solid #39ff1470;
+  box-shadow: 0 0 20px #39ff1425, inset 0 0 25px #00f6ff10;
+}
+.ring {
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed var(--cyan);
+  border-radius: 50%;
+  animation: spin 12s linear infinite;
+}
+.ring-two {
+  position: absolute;
+  inset: -7px;
+  border: 2px solid transparent;
+  border-top-color: var(--green);
+  border-bottom-color: var(--cyan);
+  border-radius: 50%;
+  animation: spin 4s linear infinite;
+}
+.result-number {
+  position: relative;
+  font-size: 83px;
+  line-height: 1;
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 0 16px #ffffff30;
+}
+.result-pill {
+  display: inline-block;
+  min-width: 125px;
+  margin-top: 4px;
+  padding: 10px 20px;
+  border: 1px solid var(--green);
+  border-radius: 30px;
+  color: var(--green);
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  box-shadow: 0 0 15px #39ff1420;
+}
+.result-pill.small { color: var(--cyan); border-color: var(--cyan); }
+.result-pill.wait { color: #b8c3cc; border-color: #60717e; }
+.result-note {
+  color: #7d8b98;
+  font-size: 11px;
+  line-height: 1.6;
+  margin-top: 16px;
+}
+.btn {
+  width: 100%;
+  min-height: 56px;
+  border: 0;
+  border-radius: 13px;
+  margin-top: 18px;
+  background: linear-gradient(100deg, #39ff14, #00f6ff);
+  color: #041009;
+  font-weight: 900;
+  font-size: 14px;
+  letter-spacing: 1px;
+  box-shadow: 0 0 20px #39ff1425;
+  cursor: pointer;
+}
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .65; cursor: default; }
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.info-box {
+  border: 1px solid #263842;
+  background: #071018;
+  border-radius: 13px;
+  padding: 16px 12px;
+}
+.info-label { color: #81929f; font-size: 10px; letter-spacing: 1px; }
+.info-value { color: var(--cyan); font-size: 19px; font-weight: 900; margin-top: 9px; }
+.history {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.history-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-radius: 10px;
+  background: #070e14;
+  border: 1px solid #1d3039;
+  font-size: 12px;
+}
+.history-result { color: var(--green); font-weight: bold; }
+.footer {
+  text-align: center;
+  color: #60717e;
+  font-size: 10px;
+  line-height: 1.7;
+  margin: 22px 5px 0;
+}
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 25px;
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  pointer-events: none;
+  background: #10221b;
+  color: var(--green);
+  border: 1px solid #39ff1470;
+  padding: 13px 18px;
+  border-radius: 12px;
+  font-size: 12px;
+  transition: .25s;
+  z-index: 10;
+  width: max-content;
+  max-width: 90%;
+  text-align: center;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.reveal { animation: pop .65s ease; }
+@keyframes glow {
+  from { text-shadow: 0 0 8px #39ff14; }
+  to { text-shadow: 0 0 15px #39ff14, 0 0 32px #39ff1470; }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes blink { 50% { opacity: .25; } }
+@keyframes pop {
+  0% { transform: scale(.65); opacity: .2; }
+  70% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@media (max-width: 360px) {
+  body { padding: 10px 9px 25px; }
+  .card { padding: 18px 12px; }
+  .result-frame { width: 155px; height: 155px; }
+  .result-number { font-size: 70px; }
+}
+</style>
+</head>
+
+<body>
+<main class="app">
+  <header class="header">
+    <div class="logo">VIP S_GOD</div>
+    <div class="subtitle">NEON DIGITAL SYSTEM</div>
+  </header>
+
+  <section class="card">
+    <div class="status-row">
+      <div class="section-title" style="margin:0">SYSTEM DASHBOARD</div>
+      <div class="status"><span class="dot"></span>ONLINE</div>
+    </div>
+
+    <div class="period">
+      <div class="label">CURRENT PERIOD</div>
+      <div class="period-value" id="periodText">Loading...</div>
+    </div>
+
+    <div class="timer-area">
+      <div class="timer-line">
+        <span>NEXT PERIOD IN</span>
+        <span class="timer" id="timer">01:00</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress" id="progressBar"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card result-card">
+    <div class="section-title">DEMO RESULT PANEL</div>
+
+    <div class="result-frame" id="resultFrame">
+      <div class="ring"></div>
+      <div class="ring-two"></div>
+      <div class="result-number" id="resultNumber">?</div>
+    </div>
+
+    <div class="result-pill wait" id="resultPill">WAITING</div>
+
+    <div class="result-note" id="status">
+      Demo mode ready. Result updates once per minute.
+    </div>
+
+    <button class="btn" id="startBtn">⚡ SHOW DEMO RESULT ⚡</button>
+
+    <div class="result-note">
+      This is a demo display, not a real prediction or guarantee.
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-title">SYSTEM INFORMATION</div>
+    <div class="info-grid">
+      <div class="info-box">
+        <div class="info-label">UPDATE INTERVAL</div>
+        <div class="info-value">60 SEC</div>
+      </div>
+      <div class="info-box">
+        <div class="info-label">CURRENT MODE</div>
+        <div class="info-value">DEMO</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-title">RECENT DEMO HISTORY</div>
+    <div class="history" id="history">
+      <div class="history-row"><span>No results yet</span><span>--</span></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    VIP S_GOD · NEON UI<br>
+    Demo results are generated locally and are not connected to any lottery service.
+  </footer>
+</main>
+
+<div class="toast" id="toast"></div>
+
 <script>
-    function updateGame() {
-        let now = new Date();
-        
-        // Date format: YYYYMMDD
-        let year = now.getFullYear();
-        let month = String(now.getMonth() + 1).padStart(2, '0');
-        let day = String(now.getDate()).padStart(2, '0');
-        let datePart = `${year}${month}${day}`;
-        
-        // Din ke total minutes nikal kar period number ka sequence banate hain
-        let totalMinutesToday = (now.getHours() * 60) + now.getMinutes();
-        let periodNumber = datePart + "1000" + (11000 + totalMinutesToday);
-        
-        document.getElementById('period_text').innerText = "PERIOD: " + periodNumber;
-        
-        // 1 minute ka unique seed banate hain taaki prediction 1 minute tak change na ho
-        let minuteSeed = Math.floor(now.getTime() / 60000);
-        let pseudoRandom = Math.sin(minuteSeed) * 10000;
-        let isBig = (pseudoRandom - Math.floor(pseudoRandom)) > 0.5;
-        
-        let prediction = isBig ? "BIG" : "SMALL";
-        let color = (prediction === "BIG") ? "#39ff14" : "#ff0000";
-        
-        let resCircle = document.getElementById('result-circle');
-        resCircle.innerHTML = prediction;
-        resCircle.style.display = 'flex';
-        resCircle.style.borderColor = color;
-        resCircle.style.color = color;
-        resCircle.style.boxShadow = "0 0 20px " + color;
-    }
+"use strict";
 
-    function handleHack() {
-        document.getElementById('hack_btn').style.display = 'none';
-        document.getElementById('result-circle').style.display = 'none';
-        document.getElementById('loader-area').style.display = 'block';
+const PERIOD_MS = 60000;
+const STORAGE_KEY = "vip_sgod_demo_v1";
+const $ = id => document.getElementById(id);
 
-        setTimeout(() => {
-            document.getElementById('loader-area').style.display = 'none';
-            updateGame();
-            document.getElementById('hack_btn').style.display = 'block';
-        }, 1500);
-    }
+let currentPeriod = "";
+let historyItems = [];
+let toastTimer = null;
 
-    // Page load hote hi current period aur prediction set ho jayegi
-    window.onload = function() {
-        updateGame();
-    };
+function getPeriodInfo() {
+  const now = Date.now();
+  const periodStart = Math.floor(now / PERIOD_MS) * PERIOD_MS;
+  const remaining = PERIOD_MS - (now % PERIOD_MS);
+  const date = new Date(periodStart);
+  const pad = n => String(n).padStart(2, "0");
+
+  const label =
+    date.getFullYear() +
+    pad(date.getMonth() + 1) +
+    pad(date.getDate()) +
+    pad(date.getHours()) +
+    pad(date.getMinutes());
+
+  return {
+    key: String(periodStart),
+    label,
+    remaining
+  };
+}
+
+/* Deterministic demo number: same period always gives the same result. */
+function getDemoResult(periodKey) {
+  let hash = 2166136261;
+
+  for (let i = 0; i < periodKey.length; i++) {
+    hash ^= periodKey.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+
+  hash ^= hash >>> 16;
+  hash = Math.imul(hash, 2246822507);
+  hash ^= hash >>> 13;
+
+  const number = (hash >>> 0) % 10;
+
+  return {
+    number,
+    type: number >= 5 ? "BIG" : "SMALL",
+    color: number % 2 === 0 ? "#39ff14" : "#00f6ff"
+  };
+}
+
+function loadHistory() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    historyItems = Array.isArray(stored) ? stored.slice(0, 8) : [];
+  } catch (_) {
+    historyItems = [];
+  }
+}
+
+function saveHistory() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(historyItems.slice(0, 8)));
+  } catch (_) {}
+}
+
+function showToast(message) {
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+}
+
+function renderHistory() {
+  const host = $("history");
+  host.innerHTML = "";
+
+  if (historyItems.length === 0) {
+    host.innerHTML =
+      '<div class="history-row"><span>No results yet</span><span>--</span></div>';
+    return;
+  }
+
+  historyItems.forEach(item => {
+    const row = document.createElement("div");
+    row.className = "history-row";
+
+    const period = document.createElement("span");
+    period.textContent = item.period;
+
+    const result = document.createElement("span");
+    result.className = "history-result";
+    result.textContent = item.number + " · " + item.type;
+    result.style.color = item.color;
+
+    row.append(period, result);
+    host.appendChild(row);
+  });
+}
+
+function showResult(result, animated) {
+  $("resultNumber").textContent = String(result.number);
+  $("resultNumber").style.color = result.color;
+  $("resultNumber").style.textShadow =
+    "0 0 10px " + result.color + ", 0 0 25px " + result.color;
+
+  const pill = $("resultPill");
+  pill.textContent = result.type;
+  pill.classList.remove("wait");
+  pill.classList.toggle("small", result.type === "SMALL");
+  pill.style.color = result.color;
+  pill.style.borderColor = result.color;
+  pill.style.boxShadow = "0 0 17px " + result.color + "30";
+
+  if (animated) {
+    const frame = $("resultFrame");
+    frame.classList.remove("reveal");
+    void frame.offsetWidth;
+    frame.classList.add("reveal");
+  }
+}
+
+function revealCurrentPeriod(info, animate) {
+  const result = getDemoResult(info.key);
+
+  /* Record this period once only. */
+  if (!historyItems.some(item => item.key === info.key)) {
+    historyItems.unshift({
+      key: info.key,
+      period: info.label,
+      number: result.number,
+      type: result.type,
+      color: result.color
+    });
+    historyItems = historyItems.slice(0, 8);
+    saveHistory();
+  }
+
+  showResult(result, animate);
+  $("status").textContent = "DEMO RESULT · PERIOD LOCKED";
+  $("startBtn").textContent = "✓ RESULT FIXED FOR THIS MINUTE";
+  $("startBtn").disabled = true;
+  renderHistory();
+}
+
+function updateClock() {
+  const info = getPeriodInfo();
+
+  if (info.key !== currentPeriod) {
+    currentPeriod = info.key;
+    $("periodText").textContent = info.label;
+
+    /* Automatically create one fixed demo result for the new minute. */
+    revealCurrentPeriod(info, true);
+  }
+
+  const seconds = Math.ceil(info.remaining / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const remainder = seconds % 60;
+
+  $("timer").textContent =
+    String(minutes).padStart(2, "0") + ":" +
+    String(remainder).padStart(2, "0");
+
+  $("progressBar").style.width =
+    (info.remaining / PERIOD_MS * 100) + "%";
+}
+
+$("startBtn").addEventListener("click", () => {
+  showToast("This period already has a fixed demo result.");
+});
+
+/* Start with the current period and update the timer smoothly. */
+loadHistory();
+updateClock();
+setInterval(updateClock, 200);
 </script>
+</body>
+</html>
